@@ -22,7 +22,7 @@ export default function Camera(props:CameraProps) {
 
   if (!permission.granted) {
     return (
-      <View style={styles.container}>
+      <View style={{...styles.container, width: props.width}}>
         <Text style={styles.message}>Permission required to scan items.</Text>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
@@ -42,27 +42,27 @@ export default function Camera(props:CameraProps) {
   }
 
   return (
-    <View style={styles.container}>
-      <CameraView onBarcodeScanned={onScan} style={cameraStyle} active 
+    <CameraView onBarcodeScanned={onScan} active 
+        style={{...styles.cameraContainer, ...cameraStyle}}
         barcodeScannerSettings={{barcodeTypes: barcodeTypes}} />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    backgroundColor:"#000000"
+    backgroundColor:"#F0F0F0",
+    padding:8
+  },
+  cameraContainer:{
+    borderWidth:2,
+    borderRadius:32,
+    borderCurve:'circular'
   },
   message: {
+    width:'100%',
     textAlign: 'center',
     paddingBottom: 10,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
   },
   text: {
     fontSize: 24,
