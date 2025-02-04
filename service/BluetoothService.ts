@@ -1,6 +1,4 @@
-import { PermissionsAndroid, Platform } from "react-native";
 import { BleManager, Device } from "react-native-ble-plx";
-import ExpoDevice from "expo-device";
 
 export default class BluetoothService {
     private device?: Device;
@@ -28,7 +26,6 @@ export default class BluetoothService {
     }
 
     async connectToDevice(id: string) {
-        this.bleManager.enable()
         this.device = await this.bleManager
             .connectToDevice(id)
             .then(device => device.discoverAllServicesAndCharacteristics());

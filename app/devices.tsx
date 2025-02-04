@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import BluetoothService from '../service/BluetoothService'
-import { FlatList, PermissionsAndroid, Text, View } from 'react-native';
-import { PERMISSIONS, request, check, requestMultiple } from 'react-native-permissions';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
+import BluetoothService from '../service/BluetoothService';
 
 export default function Devices() {
     const [devices, setDevices] = useState<Array<string | undefined>>([]);
+    const instance = useRef(BluetoothService.getInstance());
 
     useEffect(() => {
         const callBack = async () => {
-            let tmpDevice: typeof devices = [];
+            let tmpDevice = new Set<string | undefined>();
 
             await requestMultiple([
                 PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
@@ -16,17 +17,21 @@ export default function Devices() {
                 PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
             ]);
 
-            let instance = BluetoothService.getInstance();
 
-            instance.scanDevices((id, name) => {
+            instance.current.scanDevices((id, name) => {
                 console.log(`Id=${id} and Name=${name}`);
-                tmpDevice.push(id);
+                tmpDevice.add(id);
             });
 
+            let interval = setInterval(() => {
+                setDevices(Array.from(tmpDevice));
+                console.log("Interval!");
+            }, 2000);
+
             setTimeout(() => {
-                instance.stopScan();
-                setDevices(Array.from(new Set(tmpDevice)));
-            }, 3000);
+                instance.current.stopScan();
+                clearInterval(interval);
+            }, 5000);
         }
 
         callBack();
@@ -36,8 +41,15 @@ export default function Devices() {
             <Text className="text-2xl font-bold text-center">Available devices</Text>
             <FlatList
                 data={devices}
+                ItemSeparatorComponent={() => <View className="p-1" />}
                 renderItem={({ item }) => (
-                    <Text key={item}>{item}</Text>
+                    <TouchableOpacity onPress={async () => {
+                        console.log("Trying connect with "+item+".")
+                        await instance.current.connectToDevice(item!);
+                        console.log("DONE!")
+                    }} className="bg-blue-400 p-3" key={item}>
+                        <Text className="text-white">{item}</Text>
+                    </TouchableOpacity>
                 )} />
         </View>
     )
