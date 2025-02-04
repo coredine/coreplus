@@ -1,23 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import BluetoothService from '../service/BluetoothService'
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, PermissionsAndroid, Text, View } from 'react-native';
+import { PERMISSIONS, request, check, requestMultiple } from 'react-native-permissions';
 
 export default function Devices() {
-    const instance = BluetoothService.getInstance();
     const [devices, setDevices] = useState<Array<string | undefined>>([]);
 
     useEffect(() => {
-        let tmpDevice: typeof devices = [];
+        const callBack = async () => {
+            let tmpDevice: typeof devices = [];
 
-        instance.scanDevices((id, name) => {
-            console.log(`Id=${id} and Name=${name}`);
-            tmpDevice.push(id);
-        });
+            await requestMultiple([
+                PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+                PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+                PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
+            ]);
 
-        setTimeout(() => {
-            instance.stopScan();
-            setDevices(Array.from(new Set(tmpDevice)));
-        }, 3000)
+            let instance = BluetoothService.getInstance();
+
+            instance.scanDevices((id, name) => {
+                console.log(`Id=${id} and Name=${name}`);
+                tmpDevice.push(id);
+            });
+
+            setTimeout(() => {
+                instance.stopScan();
+                setDevices(Array.from(new Set(tmpDevice)));
+            }, 3000);
+        }
+
+        callBack();
     }, [])
     return (
         <View className="flex items-center">

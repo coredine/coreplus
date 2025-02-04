@@ -25,11 +25,6 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
-        "android.permission.BLUETOOTH_CONNECT",
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
-        "android.permission.BLUETOOTH",
-        "android.permission.BLUETOOTH_ADMIN",
         "android.permission.BLUETOOTH_CONNECT"
       ],
       "package": "com.coredine.coreplus"
@@ -47,7 +42,16 @@
           "recordAudioAndroid": true
         }
       ],
-      "react-native-ble-plx"
+      "react-native-ble-plx",
+      [
+        "react-native-permissions",
+        {
+          "iosPermissions": [
+            "Camera",
+            "Bluetooth"
+          ]
+        }
+      ]
     ]
   }
 }
