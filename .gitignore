@@ -40,3 +40,6 @@ yarn-error.*
 ## build
 android
 ios
+
+# IDE
+.idea
