@@ -1,16 +1,21 @@
 import { Component, ReactNode } from "react";
 import { View } from "react-native";
-import { CreditCardData } from "../components/creditCardFormModal";
 
 export interface CheckoutProperties {
     //product array 
+}
+
+export interface CreditCardData {
+    cardNumber: string | undefined;
+    cardHolder: string | undefined;
+    expirationDate: Date | undefined;
+    verificationValue: string | undefined;
 }
 
 export interface CheckoutStates {
     creditCardData: CreditCardData;
     canPay: boolean;
 }
-
 
 export default class Checkout extends Component<CheckoutProperties, CheckoutStates, any> {
     constructor(properties: CheckoutProperties) {
