@@ -14,6 +14,7 @@ export default function App() {
       <TempLink path="/home" label="Home" />
       <TempLink path="/devices" label="Devices" />
       <TempLink path="/review" label="Review" />
+      <TempLink path="/cart" label="Cart" />
       <TempLink path="/checkout" label="Checkout" />
     </View>
   );
