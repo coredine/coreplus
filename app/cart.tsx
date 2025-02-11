@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import ResizableComponent from '../components/ResizableComponent';
 
 
