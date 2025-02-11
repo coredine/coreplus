@@ -9,14 +9,14 @@ export default class ResizableComponent extends Component {
   constructor(props) {
     super(props);
     const minHeight = this.props.minHeight ? this.props.minHeight : 250;
-
+    
     this.state = {
       offset          : 0,
       topHeight       : minHeight, // min height for top pane header
       bottomHeight    : minHeight, // min height for bottom pane header,
       deviceHeight    : Dimensions.get('window').height,
       isDividerClicked: false,
-
+      dividerHeight : this.props.dividerHeight ? this.props.dividerHeight : 12,
       pan             : new Animated.ValueXY()
     }
 
@@ -61,7 +61,7 @@ export default class ResizableComponent extends Component {
         </Animated.View>
 
         {/* Divider */}
-        <View style={[{height: 10}, this.state.isDividerClicked ? {backgroundColor: '#666'} : {backgroundColor: '#e2e2e2'}]} 
+        <View style={[{height: this.state.dividerHeight}, this.state.isDividerClicked ? {backgroundColor: '#666'} : {backgroundColor: '#e2e2e2'}]} 
             {...this._panResponder.panHandlers}
         >
         </View>
