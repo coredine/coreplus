@@ -7,8 +7,8 @@ import { StyleSheet, View, Dimensions, PanResponder, Animated, Text } from 'reac
 */
 export default class ResizableComponent extends Component {
   constructor(props) {
-    const minHeight = 250;
     super(props);
+    const minHeight = this.props.minHeight ? this.props.minHeight : 250;
 
     this.state = {
       offset          : 0,
