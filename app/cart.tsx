@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera from '../components/camera';
+import { useState } from 'react';
 
 
 export default function App() {
+  const [productList, setProductList] = useState(["Product 1", "Product 1", "Product 1", "Product 1", "Product 1"]);
+  
   return (
     <ResizableComponent childOne={ ( 
       <View style={styles.container}>
@@ -11,7 +14,11 @@ export default function App() {
         <Camera barcodeType='qr' width={300} height={180} />
       </View>
     ) } childTwo={ ( 
-      <Text>Shopping cart</Text> 
+      <ScrollView>
+        {productList.map( (value, index) => (
+          <Text key={index} style={styles.text}>{value}</Text> 
+        ))}
+      </ScrollView>
     ) } />
   );
 }
