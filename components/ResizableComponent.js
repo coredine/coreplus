@@ -59,7 +59,7 @@ export default class ResizableComponent extends Component {
       <View style={styles.content}>
 
         {/* Top View */}
-        <Animated.View style = {[{backgroundColor: 'pink', minHeight: this.state.minHeight, flex: 1}, {height: this.state.topHeight}]}>
+        <Animated.View style = {[{minHeight: this.state.minHeight, flex: 1}, {height: this.state.topHeight}]}>
         { this.props.childOne?this.props.childOne:null }
         </Animated.View>
 
@@ -70,7 +70,7 @@ export default class ResizableComponent extends Component {
         </View>
 
         {/* Bottom View */}
-        <Animated.View style={[{backgroundColor: 'green', minHeight: this.state.minHeight}, {height: this.state.bottomHeight}]} >
+        <Animated.View style={[{minHeight: this.state.minHeight}, {height: this.state.bottomHeight}]} >
          {this.props.childTwo?this.props.childTwo:null}
         </Animated.View>
       </View>
