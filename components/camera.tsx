@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   cameraContainer:{
     borderWidth:2,
-    borderRadius:32,
+    borderRadius:20,
     borderCurve:'circular'
   },
   message: {
