@@ -69,7 +69,7 @@ export default class ResizableComponent extends Component {
           { ...this._panResponder.panHandlers } />
 
         {/* Bottom View */}
-        <Animated.View style={[{minHeight: this.state.startingHeight}, {height: this.state.bottomHeight}]} >
+        <Animated.View style={[{minHeight: this.state.minHeight}, {height: this.state.bottomHeight}]} >
           { this.props.childTwo?this.props.childTwo:null }
         </Animated.View>
 
