@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera from '../components/camera';
 import { useState } from 'react';
+import { BarcodeScanningResult } from 'expo-camera';
 
 
 export default function App() {
@@ -11,7 +12,9 @@ export default function App() {
     <ResizableComponent childOne={ ( 
       <View style={styles.container}>
         <Text style={styles.text}>Scanner</Text> 
-        <Camera barcodeType='qr' width={300} height={180} />
+        <Camera barcodeType='qr' width={300} height={180} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+          setProductList( [...productList, value.data])
+        }} />
       </View>
     ) } childTwo={ ( 
       <ScrollView>
