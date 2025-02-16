@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Reanimated from 'react-native-reanimated';
@@ -12,7 +12,7 @@ export interface Product {
 }
 
 interface ProductProps extends Product{
-
+  onPressRemove: Function;
 }
 
 export default function ProductCard(props: ProductProps){
@@ -22,7 +22,9 @@ export default function ProductCard(props: ProductProps){
 
     return (
       <Reanimated.View style={{width:64}} className="bg-red-500 justify-center">
-        <Text className="text-center text-2xl text-white">X</Text>
+        <TouchableOpacity onPress={() => props?.onPressRemove()}>
+          <Text className="text-center text-2xl text-white">X</Text>
+        </TouchableOpacity>
       </Reanimated.View>
     )
   }
