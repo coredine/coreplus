@@ -3,14 +3,7 @@ import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
-
-interface Product {
-  sku: string;
-  price: number;
-  weight: number;
-  title: string;
-  picture?: string;
-}
+import { Product } from '../components/Product';
 
 function getProductBySKU(sku : string) : Product | undefined{
   const list = [{
