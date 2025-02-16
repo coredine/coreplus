@@ -9,7 +9,7 @@ interface Product {
   price: number;
   weight: number;
   title: string;
-  picture: string;
+  picture?: string;
 }
 
 export default function App() {
