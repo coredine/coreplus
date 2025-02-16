@@ -12,8 +12,22 @@ interface Product {
   picture?: string;
 }
 
+function getProductBySKU(sku : string){
+  const list = [{
+    sku: "123456", title: "abc-123",
+    price: 19.99, weight: 1.1
+  },{
+    sku: "123458", title: "Lolapop",
+    price: 1.79, weight: 0.25
+  },{
+    sku: "127659", title: "Apple",
+    price: 2.19, weight: 0.31
+  }]
+  return list.find( (value) => value.sku===sku)
+}
+
 export default function App() {
-  const [productList, setProductList] = useState(["Product 1", "Product 1", "Product 1", "Product 1", "Product 1"]);
+  const [productList, setProductList] = useState<Product[]>([]);
   const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
   
   return (
@@ -21,14 +35,18 @@ export default function App() {
       <View style={styles.container}>
         <Text style={styles.text}>Scanner</Text> 
         <Camera barcodeType='qr' width={300} height={180} scanMode={scanMode} onBarcodeScanned={async (value: BarcodeScanningResult) => {
-          setProductList( [...productList, value.data])
-          setScanMode(ScanMode.NEVER)
+          console.log(value.data)
+          let parsed = getProductBySKU(value.data);
+          if (parsed) {
+            setProductList( [...productList, parsed])
+            setScanMode(ScanMode.NEVER)
+          }
         }} />
       </View>
     ) } childTwo={ ( 
       <ScrollView>
-        {productList.map( (value, index) => (
-          <Text key={index} style={styles.text}>{value}</Text> 
+        {productList.map( (value : Product, index) => (
+          <Text key={index} style={styles.text}>{value.title}</Text> 
         ))}
       </ScrollView>
     ) } />
