@@ -27,7 +27,10 @@ function getProductBySKU(sku : string){
 }
 
 export default function App() {
-  const [productList, setProductList] = useState<Product[]>([]);
+  const [productList, setProductList] = useState<Product[]>([{
+    sku: "123456", title: "abc-123",
+    price: 19.99, weight: 1.1
+  }]);
   const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
   
   return (
