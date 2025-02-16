@@ -12,7 +12,7 @@ interface Product {
   picture?: string;
 }
 
-function getProductBySKU(sku : string){
+function getProductBySKU(sku : string) : Product | undefined{
   const list = [{
     sku: "123456", title: "abc-123",
     price: 19.99, weight: 1.1
