@@ -3,11 +3,12 @@ import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
-import { Product } from '../components/Product';
+import ProductCard, { Product } from '../components/Product';
 
 function getProductBySKU(sku : string) : Product | undefined{
   const list = [{
     sku: "123456", title: "abc-123",
+    picture : "https://reactnative.dev/img/tiny_logo.png",
     price: 19.99, weight: 1.1
   },{
     sku: "123458", title: "Lolapop",
@@ -42,7 +43,10 @@ export default function App() {
     ) } childTwo={ ( 
       <ScrollView>
         {productList.map( (value : Product, index) => (
-          <Text key={index} style={styles.text}>{value.title}</Text> 
+          <ProductCard key={index} picture={value?.picture} 
+            sku={value.sku} title={value.title}
+            price={value.price} weight={value.weight}
+            />
         ))}
       </ScrollView>
     ) } />
