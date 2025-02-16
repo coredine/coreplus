@@ -36,9 +36,9 @@ export default function ProductCard(props: ProductProps){
           margin:8, marginLeft:18, marginRight:18,
           borderRadius:8
         }}
-        friction={2.5}
+        friction={2.85}
         enableTrackpadTwoFingerGesture
-        rightThreshold={45}
+        rightThreshold={35}
         renderRightActions={RemoveItem}
         >
         <View className="flex flex-row w-100 justify-between bg-white p-2">
