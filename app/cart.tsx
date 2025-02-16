@@ -41,7 +41,7 @@ export default function App() {
         }} />
       </View>
     ) } childTwo={ ( 
-      <ScrollView>
+      <ScrollView className='m-3 bg-gray-200 rounded-lg py-2'>
         {productList.map( (value : Product, index) => (
           <ProductCard key={index} picture={value?.picture} 
             sku={value.sku} title={value.title}
