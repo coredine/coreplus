@@ -37,10 +37,10 @@ export default function Camera(props:CameraProps) {
   }
 
   const onScan = (scanResult:BarcodeScanningResult) => {
-    // Only call the method if the scan result is different.
     if (props.scanMode==ScanMode.NEVER) 
       return;
 
+    // Only call the method if the scan result is different or scan mode is always.
     if (lastScan!==scanResult.data || props.scanMode==ScanMode.ALWAYS) {
       if (props.onBarcodeScanned)
         props.onBarcodeScanned(scanResult);
