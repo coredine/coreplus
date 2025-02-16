@@ -8,7 +8,11 @@ export interface Product {
   picture?: string;
 }
 
-export default function ProductCard(props: Product){
+interface ProductProps extends Product{
+
+}
+
+export default function ProductCard(props: ProductProps){
   const noImage = require("../assets/no-image.png");
   return (
     <View className="flex flex-row w-100 justify-between bg-red-300 m-2 mx-6 p-2 rounded-lg">
