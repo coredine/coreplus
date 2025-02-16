@@ -46,6 +46,7 @@ export default function App() {
           <ProductCard key={index} picture={value?.picture} 
             sku={value.sku} title={value.title}
             price={value.price} weight={value.weight}
+            onPressRemove={() => {console.log("remove " + value.sku)}}
             />
         ))}
       </ScrollView>
