@@ -4,6 +4,13 @@ import Camera, { ScanMode } from '../components/camera';
 import { useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 
+interface Product {
+  sku: string;
+  price: number;
+  weight: number;
+  title: string;
+  picture: string;
+}
 
 export default function App() {
   const [productList, setProductList] = useState(["Product 1", "Product 1", "Product 1", "Product 1", "Product 1"]);
