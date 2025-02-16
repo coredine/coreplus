@@ -33,7 +33,7 @@ export default function ProductCard(props: ProductProps){
     <GestureHandlerRootView>
       <ReanimatedSwipeable 
         containerStyle={{
-          margin:6, marginLeft:12, marginRight:12,
+          margin:8, marginLeft:18, marginRight:18,
           borderRadius:8
         }}
         friction={2.5}
