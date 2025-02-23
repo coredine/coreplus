@@ -1,4 +1,6 @@
 import { BleError, BleManager, Characteristic, Device } from "react-native-ble-plx";
+import { Product } from "../components/Product";
+import { StaticCart } from "../components/StaticCart";
 
 const CART_SERVICE = "1cf9e025-5cee-4558-a754-731e27e028ff";
 
@@ -58,7 +60,9 @@ export default class BluetoothService {
      */
     public async skuCallback(error: BleError | null, characteristic: Characteristic | null) {
         console.log("READING...");
-        let product = JSON.parse(atob((await characteristic?.read())?.value!));
+        let product : Product = JSON.parse(atob((await characteristic?.read())?.value!));
         console.log(product);
+
+        StaticCart.addProduct(product)
     }
 }
