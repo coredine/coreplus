@@ -6,7 +6,7 @@ import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
 
-function getProductBySKU(sku : string) : Product | undefined{
+async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<Product | undefined>{
   const list = [{
     sku: "123456", title: "abc-123",
     picture : "https://reactnative.dev/img/tiny_logo.png",
@@ -18,6 +18,7 @@ function getProductBySKU(sku : string) : Product | undefined{
     sku: "127659", title: "Apple",
     price: 2.19, weight: 0.31
   }]
+  let result = await instance.sendSku(`SKU-${sku}`);
   return list.find( (value) => value.sku===sku)
 }
 
@@ -35,7 +36,7 @@ export default function App() {
         <Text style={styles.text}>Scanner</Text> 
         <Camera barcodeType='qr' width={300} height={180} scanMode={scanMode} onBarcodeScanned={async (value: BarcodeScanningResult) => {
           console.log(value.data)
-          let parsed = getProductBySKU(value.data);
+          let parsed = await getProductBySKU(instance.current, value.data);
           if (parsed) {
             setProductList( [...productList, parsed])
             setScanMode(ScanMode.NEVER)
