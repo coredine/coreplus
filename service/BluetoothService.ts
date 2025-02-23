@@ -56,7 +56,9 @@ export default class BluetoothService {
      * After the SKU is send, the characteristic of this callback should contains 
      * the item that has this SKU.
      */
-    public skuCallback(error: BleError | null, characteristic: Characteristic | null) {
-        console.log(atob(characteristic?.value!));
+    public async skuCallback(error: BleError | null, characteristic: Characteristic | null) {
+        console.log("READING...");
+        let product = JSON.parse(atob((await characteristic?.read())?.value!));
+        console.log(product);
     }
 }
