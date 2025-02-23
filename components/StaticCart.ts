@@ -1,17 +1,17 @@
 import { Product } from "./Product";
 
 export class StaticCart {
-    private static product : Product[] = [];
+    private static products : Product[] = [];
     
     public static productList() : Product[]{
-        return this.product;
+        return this.products;
     }
 
     public static addProduct(newProduct : Product){
-        return this.product.push(newProduct)
+        return this.products.push(newProduct)
     }
 
     public static clearProductList(){
-        this.product = []
+        this.products = []
     }
 }
