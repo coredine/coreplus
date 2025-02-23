@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
-import Camera, { ScanMode } from '../components/camera';
+import Camera from '../components/camera';
 import { useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
@@ -25,20 +25,18 @@ async function getProductBySKU(instance : BluetoothService, sku : string) : Prom
 
 export default function App() {
   const productList = StaticCart.productList();
-  const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
+  const [trigger, setTrigger] = useState(0);
   const instance = useRef(BluetoothService.getInstance());
+
+  StaticCart.setTrigger(trigger, setTrigger)
   
   return (
     <ResizableComponent childOne={ ( 
       <View style={styles.container}>
         <Text style={styles.text}>Scanner</Text> 
-        <Camera barcodeType='qr' width={300} height={180} scanMode={scanMode} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+        <Camera barcodeType='qr' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
           console.log(value.data)
-          let parsed = await getProductBySKU(instance.current, value.data);
-          if (parsed) {
-            StaticCart.addProduct(parsed)
-            setScanMode(ScanMode.NEVER)
-          }
+          await getProductBySKU(instance.current, value.data);
         }} />
       </View>
     ) } childTwo={ ( 
