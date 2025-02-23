@@ -10,4 +10,8 @@ export class StaticCart {
     public static addProduct(newProduct : Product){
         return this.product.push(newProduct)
     }
+
+    public static clearProductList(){
+        this.product = []
+    }
 }
