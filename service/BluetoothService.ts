@@ -50,6 +50,7 @@ export default class BluetoothService {
     }
 
     public async sendSku(sku: string) {
+        StaticCart.scanOff();
         await this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_SKU, btoa(sku));
     }
 
@@ -64,5 +65,6 @@ export default class BluetoothService {
         console.log(product);
 
         StaticCart.addProduct(product)
+        StaticCart.scanOn()
     }
 }
