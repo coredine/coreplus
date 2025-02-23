@@ -5,6 +5,12 @@ export class StaticCart {
     private static products : Product[] = [];
     private static scanMode : ScanMode = ScanMode.ALWAYS;
 
+    private static trigger : any = {};
+
+    public static setTrigger(newTrigger: any, newSetTrigger: any){
+        this.trigger = { newTrigger, newSetTrigger }
+    }
+
     public static scanOff(){
         this.scanMode = ScanMode.NEVER
     }
@@ -20,6 +26,7 @@ export class StaticCart {
     }
 
     public static addProduct(newProduct : Product){
+        this.trigger.newSetTrigger(this.trigger.newTrigger + 1)
         return this.products.push(newProduct)
     }
 
