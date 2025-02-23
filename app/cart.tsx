@@ -1,9 +1,10 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
+import BluetoothService from '../service/BluetoothService';
 
 function getProductBySKU(sku : string) : Product | undefined{
   const list = [{
@@ -26,6 +27,7 @@ export default function App() {
     price: 19.99, weight: 1.1
   }]);
   const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
+  const instance = useRef(BluetoothService.getInstance());
   
   return (
     <ResizableComponent childOne={ ( 
