@@ -61,10 +61,12 @@ export default class BluetoothService {
      */
     public async skuCallback(error: BleError | null, characteristic: Characteristic | null) {
         console.log("READING...");
-        let product : Product = JSON.parse(atob((await characteristic?.read())?.value!));
+        let product : Product | number = JSON.parse(atob((await characteristic?.read())?.value!));
         console.log(product);
 
-        StaticCart.addProduct(product)
+        if (typeof product !== "number"){
+            StaticCart.addProduct(product)
+        }
         StaticCart.scanOn()
     }
 }
