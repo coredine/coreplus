@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
+import { StaticCart } from '../components/StaticCart';
 
 async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<Product | undefined>{
   const list = [{
@@ -18,15 +19,12 @@ async function getProductBySKU(instance : BluetoothService, sku : string) : Prom
     sku: "127659", title: "Apple",
     price: 2.19, weight: 0.31
   }]
-  let result = await instance.sendSku(`SKU-${sku}`);
+  await instance.sendSku(`SKU-${sku}`);
   return list.find( (value) => value.sku===sku)
 }
 
 export default function App() {
-  const [productList, setProductList] = useState<Product[]>([{
-    sku: "123456", title: "abc-123",
-    price: 19.99, weight: 1.1
-  }]);
+  const productList = StaticCart.productList();
   const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
   const instance = useRef(BluetoothService.getInstance());
   
@@ -38,7 +36,7 @@ export default function App() {
           console.log(value.data)
           let parsed = await getProductBySKU(instance.current, value.data);
           if (parsed) {
-            setProductList( [...productList, parsed])
+            StaticCart.addProduct(parsed)
             setScanMode(ScanMode.NEVER)
           }
         }} />
