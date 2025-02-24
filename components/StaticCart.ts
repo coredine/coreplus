@@ -7,14 +7,20 @@ export class StaticCart {
 
     private static trigger : any = {};
 
+    private static update() {
+        this.trigger.newSetTrigger(this.trigger.newTrigger + 1)
+    }
+
     public static setTrigger(newTrigger: any, newSetTrigger: any){
         this.trigger = { newTrigger, newSetTrigger }
     }
 
     public static scanOff(){
+        this.update()
         this.scanMode = ScanMode.NEVER
     }
     public static scanOn(){
+        this.update()
         this.scanMode = ScanMode.ALWAYS
     }
     public static getScanMode(){
@@ -26,11 +32,12 @@ export class StaticCart {
     }
 
     public static addProduct(newProduct : Product){
-        this.trigger.newSetTrigger(this.trigger.newTrigger + 1)
+        this.update()
         return this.products.push(newProduct)
     }
 
     public static clearProductList(){
+        this.update()
         this.products = []
     }
 }
