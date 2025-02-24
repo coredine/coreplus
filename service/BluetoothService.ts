@@ -49,9 +49,9 @@ export default class BluetoothService {
         this.device = undefined;
     }
 
-    public async sendSku(sku: string) {
+    public async sendSku(sku: string, action: "ADD" | "DEL") {
         StaticCart.scanOff();
-        await this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_SKU, btoa(sku));
+        await this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_SKU, btoa(JSON.stringify({sku, action})));
     }
 
     /**
