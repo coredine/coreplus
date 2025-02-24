@@ -37,7 +37,6 @@ export default function App() {
         <Camera barcodeType='qr' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
           console.log(value.data)
           StaticCart.scanOff();
-          setTrigger(trigger+1);
           await getProductBySKU(instance.current, value.data);
         }} />
       </View>
