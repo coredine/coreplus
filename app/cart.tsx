@@ -22,7 +22,7 @@ export default function App() {
     <ResizableComponent childOne={ ( 
       <View style={styles.container}>
         <Text style={styles.text}>Scanner</Text> 
-        <Camera barcodeType='qr' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+        <Camera barcodeType='code128' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
           console.log(value.data)
           StaticCart.scanOff();
           await getProductBySKU(instance.current, value.data);
