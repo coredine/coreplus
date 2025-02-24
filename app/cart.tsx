@@ -7,20 +7,8 @@ import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
 
-async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<Product | undefined>{
-  const list = [{
-    sku: "123456", title: "abc-123",
-    picture : "https://reactnative.dev/img/tiny_logo.png",
-    price: 19.99, weight: 1.1
-  },{
-    sku: "123458", title: "Lolapop",
-    price: 1.79, weight: 0.25
-  },{
-    sku: "127659", title: "Apple",
-    price: 2.19, weight: 0.31
-  }]
+async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<void>{
   await instance.sendSku(sku, "ADD");
-  return list.find( (value) => value.sku===sku)
 }
 
 export default function App() {
