@@ -19,7 +19,7 @@ async function getProductBySKU(instance : BluetoothService, sku : string) : Prom
     sku: "127659", title: "Apple",
     price: 2.19, weight: 0.31
   }]
-  await instance.sendSku(`SKU-${sku}`);
+  await instance.sendSku(sku, "ADD");
   return list.find( (value) => value.sku===sku)
 }
 
@@ -36,6 +36,8 @@ export default function App() {
         <Text style={styles.text}>Scanner</Text> 
         <Camera barcodeType='qr' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
           console.log(value.data)
+          StaticCart.scanOff();
+          setTrigger(trigger+1);
           await getProductBySKU(instance.current, value.data);
         }} />
       </View>
