@@ -1,5 +1,6 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, ReactNode } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 
 export interface CheckoutProperties {
     //product array 
@@ -23,7 +24,11 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
 
     render(): ReactNode {
         return(
-            <View>
+            <View className="w-100 h-100">
+                <View className="bg-blue-500 h-[8%]">
+                    <Text className="m-auto font-extrabold text-4xl">Payment</Text>
+                </View>
+
                 <View>
                     {/* PAYMENT METHODS */}
                     {/* OPEN MODAL */}

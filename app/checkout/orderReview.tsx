@@ -28,7 +28,7 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
                 <View className="h-[77%]">
                     <View className="bg-gray-200 h-[95%] w-5/6 m-auto rounded-lg">
                         <Text>ARRAY....</Text>
-                        {/* <FlatList/> */}
+                        {/* <FlatList/> of ProductCard */}
                     </View>
                 </View>
 
