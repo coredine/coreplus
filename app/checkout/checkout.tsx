@@ -27,6 +27,10 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
         }
     }
 
+    componentDidUpdate(prevProps: Readonly<CheckoutProperties>, prevState: Readonly<CheckoutStates>, snapshot?: any): void {
+        console.log("AAAHHHHH");
+    }
+
     private getPlatformPaymentMethodButton = (): ReactElement | null => {
         if (Platform.OS == "android") 
             return <PaymentMethodCard name={"Google Pay"} icons={[faGooglePay]} height={"14%"} value={this.state.platformMethodSelected} onValueChanged={(value: boolean) => {this.setState({platformMethodSelected: value})}} implemented={false} description={undefined}/>;
@@ -59,7 +63,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                     {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"}/>
+                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"} grayedOut={true}/>
             </View>
         )
     }

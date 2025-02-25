@@ -14,16 +14,9 @@ export interface PaymentMethodCardProperties {
     onValueChanged: (value: boolean) => void
 }
 
-export interface PaymentMethodCardStates {
-    checked: boolean;
-}
-
-export class PaymentMethodCard extends Component<PaymentMethodCardProperties, PaymentMethodCardStates, any> {
+export class PaymentMethodCard extends Component<PaymentMethodCardProperties, any, any> {
     constructor(properties: PaymentMethodCardProperties) {
         super(properties);
-        this.state = {
-            checked: false
-        }
     }
 
     private toggle = () => {
@@ -38,8 +31,8 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, Pa
 
                     <View className="flex-col w-[70%] ">
                         <View className="flex-row">
-                            <Checkbox value={this.props.value} onValueChange={this.props.onValueChanged} style={{backgroundColor: "white", borderColor: "black", margin: 5}}/>
-                            <Text className="font-semibold text-xl">{this.props.name}</Text>
+                            <Checkbox value={this.props.value} onValueChange={this.props.onValueChanged} style={{backgroundColor: "white", borderColor: "black", margin: 5}} color="blue"/>
+                            <Text className="font-semibold text-xl text-purple-400">{this.props.name}</Text>
                         </View>
 
                         {this.props.description ? 
@@ -55,7 +48,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, Pa
                         <View className="flex-row-reverse w-[30%]  h-[100%]">
                             {this.props.icons.map((item, index) => (
                                 <View key={index} className="m-auto">
-                                    <FontAwesomeIcon size={40} icon={item}/>
+                                    <FontAwesomeIcon size={40} icon={item} color="blue"/>
                                 </View>
                             ))}
                         </View> 
@@ -64,7 +57,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, Pa
                     }
 
                 </View>
-                
+
             </TouchableOpacity>
         )
     }
