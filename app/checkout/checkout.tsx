@@ -17,7 +17,7 @@ export interface CheckoutStates {
         platformMethodSelected: boolean;
     };
     selectedOptionKey: string | undefined;
-    canProceed: boolean;
+    cannotProceed: boolean;
 }
 
 export default class Checkout extends Component<CheckoutProperties, CheckoutStates, any> {
@@ -31,7 +31,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                 platformMethodSelected: false
             },
             selectedOptionKey: undefined,
-            canProceed: true
+            cannotProceed: true
         }
     }
 
@@ -55,10 +55,14 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
     }
 
     private updateProceedState = (): void => {
-        // this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
-        //     if (value) this.setState({canProceed: true});
-        // });
-        this.setState({canProceed: false});
+        let nothingSelected: boolean = true;
+        this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
+            if (value && this.state.cannotProceed === true) {
+                this.setState({cannotProceed: false});
+                nothingSelected = false;
+            } else if (value) nothingSelected = false;
+        });
+        if (nothingSelected === true && this.state.cannotProceed === false) this.setState({cannotProceed: true});
     }
 
     private resetOptions = (): void => {
@@ -122,7 +126,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                     {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"} grayedOut={this.state.canProceed}/>
+                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
             </View>
         )
     }

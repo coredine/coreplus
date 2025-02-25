@@ -24,10 +24,8 @@ export class CheckoutButtons extends Component<CheckoutButtonsProperties, any, a
                         <FontAwesomeIcon icon={faArrowLeft} size={50} style={{margin: "auto"}}/>
                     </TouchableOpacity>
 
-                    <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={this.props.grayedOut ? undefined : this.props.proceedOnpress}>
-                        <View className="m-auto" style={{opacity: 50}}>
-                            <Text className="m-auto font-extrabold">{this.props.proceedText}</Text>
-                        </View>
+                    <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={this.props.grayedOut ? undefined : this.props.proceedOnpress} style={{opacity: this.props.grayedOut ? 0.50 : 1}}>
+                        <Text className="m-auto font-extrabold">{this.props.proceedText}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
