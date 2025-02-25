@@ -5,15 +5,7 @@ export interface CheckoutProperties {
     //product array 
 }
 
-export interface CreditCardData {
-    cardNumber: string | undefined;
-    cardHolder: string | undefined;
-    expirationDate: Date | undefined;
-    verificationValue: string | undefined;
-}
-
 export interface CheckoutStates {
-    creditCardData: CreditCardData;
     canPay: boolean;
 }
 
@@ -21,12 +13,6 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
     constructor(properties: CheckoutProperties) {
         super(properties);
         this.state = {
-            creditCardData: {
-                cardNumber: undefined,
-                cardHolder: undefined,
-                expirationDate: undefined,
-                verificationValue: undefined
-            },
             canPay: false
         }
     }
