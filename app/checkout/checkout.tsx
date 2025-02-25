@@ -1,9 +1,9 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { Component, ReactNode } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { Component, ReactElement, ReactNode } from "react";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { PaymentMethodCard } from "../../components/paymentMethodCard";
-import { faPaypal } from "@fortawesome/free-brands-svg-icons";
+import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fortawesome/free-brands-svg-icons";
 import { CheckoutButtons } from "../../components/checkoutButtons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 export interface CheckoutProperties {
     //product array 
@@ -13,6 +13,7 @@ export interface CheckoutStates {
     smartCartSelected: boolean;
     paypalSelected: boolean;
     creditCardSelected: boolean;
+    platformMethodSelected: boolean;
 }
 
 export default class Checkout extends Component<CheckoutProperties, CheckoutStates, any> {
@@ -21,8 +22,21 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
         this.state = {
             smartCartSelected: false,
             paypalSelected: false,
-            creditCardSelected: false
+            creditCardSelected: false,
+            platformMethodSelected: false
         }
+    }
+
+    private getPlatformPaymentMethodButton = (): ReactElement | null => {
+        if (Platform.OS == "android") 
+            return <PaymentMethodCard name={"Google Pay"} icons={[faGooglePay]} height={"14%"} value={this.state.platformMethodSelected} onValueChanged={(value: boolean) => {this.setState({platformMethodSelected: value})}} implemented={false} description={undefined}/>;
+        else if (Platform.OS == "ios") 
+            return <PaymentMethodCard name={"Apple Pay"} icons={[faApplePay]} height={"14%"} value={this.state.platformMethodSelected} onValueChanged={(value: boolean) => {this.setState({platformMethodSelected: value})}} implemented={false} description={undefined}/>;
+        return null;
+    }
+
+    private proceed = () => {
+        console.log("oui");
     }
 
     render(): ReactNode {
@@ -33,12 +47,19 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                 </View>
 
                 <View className="h-[77%]">
-                    <PaymentMethodCard lined={true} description={"SmartCart......"} name={"SmartCart"} implemented={true} onValueChanged={(value: boolean) => {this.setState({smartCartSelected: value})}} icons={undefined} height="14%" value={this.state.smartCartSelected}/>
-                    <PaymentMethodCard lined={true} description={"Paypal......"} name={"Paypal"} implemented={false} onValueChanged={(value: boolean) => {this.setState({paypalSelected: value})}} icons={undefined} height="14%" value={this.state.paypalSelected}/>
-                    <PaymentMethodCard lined={true} description={"Credit Card or Debit Card....."} name={"Credit Card or Debit Card"} implemented={false} onValueChanged={(value: boolean) => {this.setState({creditCardSelected: value})}} icons={undefined} height="14%" value={this.state.creditCardSelected}/>
+                    <PaymentMethodCard 
+                    description={"SmartCart custom paying service."} 
+                    name={"SmartCart"} implemented={true} 
+                    onValueChanged={(value: boolean) => {this.setState({smartCartSelected: value})}} 
+                    icons={[faCartShopping]} 
+                    height="14%" 
+                    value={this.state.smartCartSelected}/>
+                    <PaymentMethodCard description={undefined} name={"Paypal"} implemented={false} onValueChanged={(value: boolean) => {this.setState({paypalSelected: value})}} icons={[faPaypal]} height="14%" value={this.state.paypalSelected}/>
+                    <PaymentMethodCard description={undefined} name={"Credit Card or Debit Card"} implemented={false} onValueChanged={(value: boolean) => {this.setState({creditCardSelected: value})}} icons={[faCcMastercard, faCcVisa]} height="14%" value={this.state.creditCardSelected}/>
+                    {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <CheckoutButtons proceedOnpress={undefined} backOnpress={undefined} proceedText={"Continue"}/>
+                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"}/>
             </View>
         )
     }

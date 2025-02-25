@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, ReactNode } from "react";
-import { View, Text, DimensionValue } from "react-native";
+import { View, Text, DimensionValue, TouchableOpacity } from "react-native";
 import Checkbox from "expo-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
@@ -9,7 +9,6 @@ export interface PaymentMethodCardProperties {
     icons: IconDefinition[] | undefined;
     name: String;
     description: String | undefined;
-    lined: boolean | undefined;
     height: DimensionValue | undefined;
     value: boolean;
     onValueChanged: (value: boolean) => void
@@ -27,38 +26,36 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, Pa
         }
     }
 
-    private valueChanged = (value: boolean) => {
-        console.log("slt");
+    private toggle = () => {
+        this.props.onValueChanged(!this.props.value);
     }
 
     render(): ReactNode {
         return(
-            <View className="w-100 flex-col m-4 bg-gray-300 rounded-md p-3" style={{height: this.props.height}}>
+            <TouchableOpacity className="w-100 flex-col m-3 bg-gray-300 rounded-md p-3" style={{height: this.props.height}} onPress={this.toggle}>
 
-                <View className="flex-row">
+                <View className="flex-row h-[100%]">
 
-                    {/*LEFT VIEW*/}
-                    <View className="flex-col">
+                    <View className="flex-col w-[70%] ">
                         <View className="flex-row">
-                            <Checkbox value={this.props.value} onValueChange={this.props.onValueChanged} style={{backgroundColor: "white", borderColor: "black"}}/>
-                            <Text>{this.props.name}</Text>
+                            <Checkbox value={this.props.value} onValueChange={this.props.onValueChanged} style={{backgroundColor: "white", borderColor: "black", margin: 5}}/>
+                            <Text className="font-semibold text-xl">{this.props.name}</Text>
                         </View>
 
                         {this.props.description ? 
                             <View className="">
-                                <Text>{this.props.description}</Text>
+                                <Text className="m-auto">{this.props.description}</Text>
                             </View> 
                         : 
                             null
                         }
                     </View>
 
-                    {/*RIGHT VIEW - ICONS AT THE RIGHT*/}
                     {this.props.icons ? 
-                        <View className="flex-row">
+                        <View className="flex-row-reverse w-[30%]  h-[100%]">
                             {this.props.icons.map((item, index) => (
-                                <View key={index} className="m-1">
-                                    <FontAwesomeIcon size={10} icon={item}/>
+                                <View key={index} className="m-auto">
+                                    <FontAwesomeIcon size={40} icon={item}/>
                                 </View>
                             ))}
                         </View> 
@@ -67,15 +64,8 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, Pa
                     }
 
                 </View>
-
-                {/*LINE AT THE BOTTOM*/}
-                {this.props.lined ?
-                    <View className="bg-bottom bg-"></View> 
-                    : 
-                    null
-                }
-
-            </View>
+                
+            </TouchableOpacity>
         )
     }
 }
