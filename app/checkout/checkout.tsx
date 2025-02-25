@@ -1,6 +1,10 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, ReactNode } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { PaymentMethodCard } from "../../components/paymentMethodCard";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CheckoutButtons } from "../../components/checkoutButtons";
 
 export interface CheckoutProperties {
     //product array 
@@ -18,10 +22,6 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
         }
     }
 
-    private sendOrder = async () => {
-        //send to mocrocontroller/server
-    }
-
     render(): ReactNode {
         return(
             <View className="w-100 h-100">
@@ -29,15 +29,12 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                     <Text className="m-auto font-extrabold text-4xl">Payment</Text>
                 </View>
 
-                <View>
+                <View className="h-[77%]">
                     {/* PAYMENT METHODS */}
                     {/* OPEN MODAL */}
                 </View>
 
-                <View>
-                    {/* GOBACK */}
-                    {/* SENDDATA */}
-                </View>
+                <CheckoutButtons proceedOnpress={undefined} backOnpress={undefined} proceedText={"Continue"}/>
             </View>
         )
     }

@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react";
 import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CheckoutButtons } from "../../components/checkoutButtons";
 
 export interface OrderReviewProperties {
     navigation: any;
@@ -32,17 +33,7 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
                     </View>
                 </View>
 
-                <View className="h-[15%] p-3 bg-white">
-                    <View className="m-auto flex-row">
-                        <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={undefined}>
-                            <FontAwesomeIcon icon={faArrowLeft} size={50} style={{margin: "auto"}}/>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={this.toCheckoutPage}>
-                            <Text className="m-auto font-extrabold">Checkout</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <CheckoutButtons backOnpress={undefined} proceedOnpress={undefined} proceedText={"Checkout"}/>
             </View>
         )
     }
