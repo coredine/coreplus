@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, ReactNode } from "react";
-import { View, Text } from "react-native";
+import { View, Text, DimensionValue } from "react-native";
 import Checkbox from "expo-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
@@ -10,24 +10,37 @@ export interface PaymentMethodCardProperties {
     name: String;
     description: String | undefined;
     lined: boolean | undefined;
+    height: DimensionValue | undefined;
+    value: boolean;
     onValueChanged: (value: boolean) => void
 }
 
-export class PaymentMethodCard extends Component<PaymentMethodCardProperties, any, any> {
+export interface PaymentMethodCardStates {
+    checked: boolean;
+}
+
+export class PaymentMethodCard extends Component<PaymentMethodCardProperties, PaymentMethodCardStates, any> {
     constructor(properties: PaymentMethodCardProperties) {
         super(properties);
+        this.state = {
+            checked: false
+        }
+    }
+
+    private valueChanged = (value: boolean) => {
+        console.log("slt");
     }
 
     render(): ReactNode {
         return(
-            <View className="w-100 h-100 flex-col">
+            <View className="w-100 flex-col m-4 bg-gray-300 rounded-md p-3" style={{height: this.props.height}}>
 
                 <View className="flex-row">
 
                     {/*LEFT VIEW*/}
                     <View className="flex-col">
                         <View className="flex-row">
-                            <Checkbox value={false} onValueChange={(value: boolean) => this.props.onValueChanged(value)}/>
+                            <Checkbox value={this.props.value} onValueChange={this.props.onValueChanged} style={{backgroundColor: "white", borderColor: "black"}}/>
                             <Text>{this.props.name}</Text>
                         </View>
 
@@ -57,7 +70,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, an
 
                 {/*LINE AT THE BOTTOM*/}
                 {this.props.lined ?
-                    <View className=""></View> 
+                    <View className="bg-bottom bg-"></View> 
                     : 
                     null
                 }
