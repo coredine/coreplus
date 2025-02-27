@@ -5,11 +5,10 @@ import Checkbox from "expo-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export interface PaymentMethodCardProperties {
-    implemented: boolean | undefined;
-    icons: IconDefinition[] | undefined;
+    icons?: IconDefinition[] | undefined;
     name: String;
-    description: String | undefined;
-    height: DimensionValue | undefined;
+    description?: String | undefined;
+    height?: DimensionValue | undefined;
     value: boolean;
     onValueChanged: (value: boolean) => void
 }
@@ -25,7 +24,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, an
 
     render(): ReactNode {
         return(
-            <TouchableOpacity className="w-100 flex-col m-3 bg-gray-300 rounded-md p-3" style={{height: this.props.height}} onPress={this.toggle}>
+            <TouchableOpacity className="w-100 flex-col m-3 bg-gray-300 rounded-md p-3" style={{height: this.props.height ? this.props.height : "14%"}} onPress={this.toggle}>
 
                 <View className="flex-row h-[100%]">
 

@@ -7,6 +7,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 export interface CheckoutProperties {
     //product array 
+    //cart
 }
 
 export interface CheckoutStates {
@@ -65,6 +66,10 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
         if (nothingSelected === true && this.state.cannotProceed === false) this.setState({cannotProceed: true});
     }
 
+    private _setState = (value: boolean, selectName: string) => {
+        this.setState({options: {...this.state.options, [selectName]: value}});
+    }
+
     private resetOptions = (): void => {
         this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
             this.setState({options: {...this.state.options, [key]: false}});
@@ -83,9 +88,9 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
 
     private getPlatformPaymentMethodButton = (): ReactElement | null => {
         if (Platform.OS == "android") 
-            return <PaymentMethodCard name={"Google Pay"} icons={[faGooglePay]} height={"14%"} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, platformMethodSelected: value}})}} implemented={false} description={undefined}/>;
+            return <PaymentMethodCard name={"Google Pay"} icons={[faGooglePay]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
         else if (Platform.OS == "ios") 
-            return <PaymentMethodCard name={"Apple Pay"} icons={[faApplePay]} height={"14%"} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, platformMethodSelected: value}})}} implemented={false} description={undefined}/>;
+            return <PaymentMethodCard name={"Apple Pay"} icons={[faApplePay]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
         return null;
     }
 
@@ -100,27 +105,22 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                 <View className="h-[77%]">
                     <PaymentMethodCard 
                     description={"SmartCart custom paying service."} 
-                    name={"SmartCart"} implemented={true} 
+                    name={"SmartCart"}
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, smartCartSelected: value}})}} 
                     icons={[faCartShopping]} 
-                    height="14%" 
+                    height="20%" 
                     value={this.state.options.smartCartSelected}/>
 
                     <PaymentMethodCard 
-                    description={undefined} 
                     name={"Paypal"} 
-                    implemented={false} 
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, paypalSelected: value}})}} 
                     icons={[faPaypal]} 
-                    height="14%" 
                     value={this.state.options.paypalSelected}/>
 
                     <PaymentMethodCard
-                    description={undefined} 
                     name={"Credit Card or Debit Card"} 
-                    implemented={false} 
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, creditCardSelected: value}})}} 
-                    icons={[faCcMastercard, faCcVisa]} height="14%" 
+                    icons={[faCcMastercard, faCcVisa]} 
                     value={this.state.options.creditCardSelected}/>
 
                     {this.getPlatformPaymentMethodButton()}
