@@ -6,6 +6,7 @@ import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<void>{
   await instance.sendSku(sku, "ADD");
