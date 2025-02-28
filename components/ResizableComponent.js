@@ -38,10 +38,12 @@ export default class ResizableComponent extends Component {
 
       // When we drag the divider, set the bottomHeight (component state) again.
       onPanResponderMove: (e, gestureState) => {
+        let moveY = Math.max(gestureState.moveY, minHeight)
         this.setState({
-            bottomHeight    : gestureState.moveY > (this.state.deviceHeight - minHeight) ? minHeight : this.state.deviceHeight - gestureState.moveY,
+            bottomHeight    : moveY > (this.state.deviceHeight - minHeight) ? minHeight : this.state.deviceHeight - moveY,
             offset: e.nativeEvent.pageY
         })
+        console.log(moveY );
       },
 
       onPanResponderRelease: (e, gestureState) => {
