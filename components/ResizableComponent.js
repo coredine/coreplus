@@ -43,7 +43,6 @@ export default class ResizableComponent extends Component {
             bottomHeight    : moveY > (this.state.deviceHeight - minHeight) ? minHeight : this.state.deviceHeight - moveY,
             offset: e.nativeEvent.pageY
         })
-        console.log(moveY );
       },
 
       onPanResponderRelease: (e, gestureState) => {
