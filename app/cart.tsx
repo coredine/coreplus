@@ -44,6 +44,13 @@ export default function App() {
                 />
             ))}
           </ScrollView>
+          {((removeMode)) ? (<>
+              <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
+              <View className='flex-1 justify-items' style={{...styles.overlay, justifyContent:'center'}}>
+                <Text className='py-2 text-white text-center'>Please scan the item to remove it</Text>
+                <Text className='py-2 text-white text-center'>{removeMode.title}</Text>
+              </View> 
+            </>): <></>}
         </SafeAreaView>
       ) } />
         {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
