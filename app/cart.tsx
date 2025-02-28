@@ -15,6 +15,7 @@ async function getProductBySKU(instance : BluetoothService, sku : string) : Prom
 export default function App() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
+  const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
   const instance = useRef(BluetoothService.getInstance());
 
   StaticCart.setTrigger(trigger, setTrigger)
@@ -37,7 +38,9 @@ export default function App() {
               <ProductCard key={index} picture={value?.picture} 
                 sku={value.sku} title={value.title}
                 price={value.price} weight={value.weight}
-                onPressRemove={() => {console.log("remove " + value.sku)}}
+                onPressRemove={() => {
+                  setRemoveMode(value);
+                }}
                 />
             ))}
           </ScrollView>
