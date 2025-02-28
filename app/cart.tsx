@@ -46,10 +46,10 @@ export default function App() {
           </ScrollView>
         </SafeAreaView>
       ) } />
-        {(StaticCart.getScanMode() != ScanMode.NEVER) ? <></> :
-          <View style={{position:'absolute', top:0, bottom:0, left:0, right:0, backgroundColor:"black", opacity:0.4}}>
-
-          </View>
+        {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
+          <>
+            <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
+          </>
         }
     </>
   );
@@ -66,5 +66,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 2,
     backgroundColor: ""
+  },
+  overlay:{
+    position:'absolute', 
+    top:0, bottom:0, 
+    left:0, right:0
   }
 });
