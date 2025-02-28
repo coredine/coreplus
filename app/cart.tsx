@@ -30,15 +30,17 @@ export default function App() {
           } } />
         </View>
       ) } childTwo={ ( 
-        <ScrollView className='m-3 bg-gray-200 rounded-lg py-2'>
-          {productList.map( (value : Product, index) => (
-            <ProductCard key={index} picture={value?.picture} 
-              sku={value.sku} title={value.title}
-              price={value.price} weight={value.weight}
-              onPressRemove={() => {console.log("remove " + value.sku)}}
-              />
-          ))}
-        </ScrollView>
+        <SafeAreaView>
+          <ScrollView className='m-3 bg-gray-200 rounded-lg py-2'>
+            {productList.map( (value : Product, index) => (
+              <ProductCard key={index} picture={value?.picture} 
+                sku={value.sku} title={value.title}
+                price={value.price} weight={value.weight}
+                onPressRemove={() => {console.log("remove " + value.sku)}}
+                />
+            ))}
+          </ScrollView>
+        </SafeAreaView>
       ) } />
         {(StaticCart.getScanMode() != ScanMode.NEVER) ? <></> :
           <View style={{position:'absolute', top:0, bottom:0, left:0, right:0, backgroundColor:"black", opacity:0.4}}>
