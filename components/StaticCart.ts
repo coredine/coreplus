@@ -9,10 +9,11 @@ export class StaticCart {
 
     private static update() {
         this.trigger.newSetTrigger(this.trigger.newTrigger + 1)
+        this.trigger.removeMethod();
     }
 
-    public static setTrigger(newTrigger: any, newSetTrigger: any){
-        this.trigger = { newTrigger, newSetTrigger }
+    public static setTrigger(newTrigger: any, newSetTrigger: any, removeMethod: any){
+        this.trigger = { newTrigger, newSetTrigger, removeMethod }
     }
 
     public static scanOff(){
