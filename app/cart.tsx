@@ -8,10 +8,6 @@ import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<void>{
-  await instance.sendSku(sku, "ADD");
-}
-
 export default function App() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
@@ -28,7 +24,7 @@ export default function App() {
           <Camera barcodeType='code128' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
             console.log(value.data);
             StaticCart.scanOff();
-            await getProductBySKU(instance.current, value.data);
+            await instance.current.sendSku(value.data, (removeMode) ? "DEL" : "ADD");
           } } />
         </View>
       ) } childTwo={ ( 
