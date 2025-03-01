@@ -1,4 +1,4 @@
-import { BleError, BleManager, Characteristic, Device } from "react-native-ble-plx";
+import { BleError, BleManager, Characteristic, Device, UUID } from "react-native-ble-plx";
 import { Product } from "../components/Product";
 import { StaticCart } from "../components/StaticCart";
 
@@ -28,6 +28,18 @@ export default class BluetoothService {
     async scanDevices(deviceFoundListener: (id?: string, name?: string) => void) {
         this.bleManager.startDeviceScan(null, null, (error, scannedDevice) => {
             deviceFoundListener(scannedDevice?.id, scannedDevice?.name!);
+        });
+    }
+
+    async scanDeviceThanConnect(id: string) {
+        return this.bleManager.startDeviceScan(null, {allowDuplicates: false }, async (error, scannedDevice) => {
+            if(scannedDevice?.id == id) {
+                this.bleManager.stopDeviceScan();
+                console.log(`Device scanned, try to connect to ${scannedDevice.id}.`);
+                await this.connectToDevice(scannedDevice.id);
+                console.log(`Connection success.`);
+                return;
+            }
         });
     }
 

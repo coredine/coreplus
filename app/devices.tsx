@@ -17,7 +17,6 @@ export default function Devices() {
                 PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
             ]);
 
-
             instance.current.scanDevices((id, name) => {
                 console.log(`Id=${id} and Name=${name}`);
                 tmpDevice.add(id);
@@ -46,7 +45,6 @@ export default function Devices() {
                     <TouchableOpacity onPress={async () => {
                         console.log("Trying connect with "+item+".")
                         await instance.current.connectToDevice(item!);
-                        await instance.current.sendSku("SKU-00001");
                         console.log("DONE!")
                     }} className="bg-blue-400 p-3" key={item}>
                         <Text className="text-white">{item}</Text>
