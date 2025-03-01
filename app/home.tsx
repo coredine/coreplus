@@ -17,6 +17,8 @@ export default function HomePage() {
         PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
         PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
       ]);
+
+      await instance.current.scanBackground();
     }
 
     callBack();
@@ -27,7 +29,7 @@ export default function HomePage() {
       <Text style={styles.text}>Scan QR Code to connect</Text>
       <Camera barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
         setScanValue(value.data);
-        await instance.current.scanDeviceThanConnect(value.data);
+        await instance.current.connectToDevice(value.data);
       }} />
       <Text style={styles.text}>{scanValue}</Text>
       <StatusBar style="auto" />
