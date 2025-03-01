@@ -65,7 +65,12 @@ export default class BluetoothService {
         console.log(product);
 
         if (typeof product !== "number"){
-            StaticCart.addProduct(product)
+            if (product.action){
+                StaticCart.removeProduct(product.sku);
+            }else{
+                StaticCart.addProduct(product);
+            }
+            
         }
         StaticCart.scanOn()
     }
