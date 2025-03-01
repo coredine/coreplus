@@ -27,7 +27,7 @@ export default class BluetoothService {
     }
 
     async scanBackground() {
-        return this.bleManager.startDeviceScan(null, { allowDuplicates: false }, () => { });
+        return this.bleManager.startDeviceScan(null, { allowDuplicates: false }, () => {});
     }
 
     async stopScan() {
@@ -36,22 +36,24 @@ export default class BluetoothService {
 
     async connectToDevice(id: string) {
         try {
-            if(this.device) return;
+            if (this.device) return;
             console.log(`Trying to connect to ${id}`)
 
             this.device = await this.bleManager.connectToDevice(id, { timeout: 5000 });
             await this.device?.discoverAllServicesAndCharacteristics();
             this.device?.monitorCharacteristicForService(CART_SERVICE, CH_JSON_ITEM, this.skuCallback);
-            
+
             await this.stopScan();
             console.log("Connection successful!");
             router.replace("/cart")
-        } catch(error) {
-            if(error instanceof BleError) {
+        } catch (error) {
+            if (error instanceof BleError) {
                 console.log(error);
 
-                if(error.message == "Operation was cancelled") {
+                if (error.message == "Operation was cancelled") {
                     alert("Enable to find the SmartCart in a 5 sec delay.");
+                } else if(error.message == `Device ${id} was disconnected`) {
+                    alert("The SmartCart was disconnected.");
                 }
             }
         }

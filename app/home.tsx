@@ -7,7 +7,7 @@ import Camera from '../components/camera';
 import BluetoothService from '../service/BluetoothService';
 
 export default function HomePage() {
-  const [scanValue, setScanValue] = useState<string>("Nothing scanned.");
+  const [scanValue, setScanValue] = useState<string | undefined>();
   const instance = useRef(BluetoothService.getInstance());
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function HomePage() {
         PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
       ]);
 
-      await instance.current.scanBackground();
+      instance.current.scanBackground();
     }
 
     callBack();
@@ -26,12 +26,17 @@ export default function HomePage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Scan QR Code to connect</Text>
+      <Text className="text-4xl font-bold text-blue-400">Coreplus&reg;</Text>
+      <Text className="text-lg font-semibold">Scan QR code to connect to a SmartCart.</Text>
       <Camera barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
         setScanValue(value.data);
         await instance.current.connectToDevice(value.data);
+        setScanValue(undefined);
       }} />
-      <Text style={styles.text}>{scanValue}</Text>
+
+      {scanValue ?
+        <Text style={styles.text}>Try to connect to {scanValue}.</Text> : <></>
+      }
       <StatusBar style="auto" />
     </View>
   );
