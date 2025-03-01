@@ -18,7 +18,7 @@ export default function App() {
   const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
   const instance = useRef(BluetoothService.getInstance());
 
-  StaticCart.setTrigger(trigger, setTrigger)
+  StaticCart.setTrigger(trigger, setTrigger, ()=>{setRemoveMode(undefined)})
   
   return (
     <>
