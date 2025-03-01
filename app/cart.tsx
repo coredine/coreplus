@@ -24,6 +24,13 @@ export default function App() {
           <Camera barcodeType='code128' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
             console.log(value.data);
             StaticCart.scanOff();
+            if (removeMode && (removeMode.sku!=value.data)) {
+              setTimeout( () => {
+                StaticCart.scanOn();
+              }, 1000);
+              
+              return;
+            }
             await instance.current.sendSku(value.data, (removeMode) ? "DEL" : "ADD");
           } } />
         </View>
