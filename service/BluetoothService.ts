@@ -38,6 +38,7 @@ export default class BluetoothService {
                 console.log(`Device scanned, try to connect to ${scannedDevice.id}.`);
                 await this.connectToDevice(scannedDevice.id);
                 console.log(`Connection success.`);
+                // need to add redirection and timeout
                 return;
             }
         });

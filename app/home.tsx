@@ -1,13 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Camera from '../components/camera';
-import { useCallback, useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
+import Camera from '../components/camera';
 import BluetoothService from '../service/BluetoothService';
 
-export default function App() {
+export default function HomePage() {
   const [scanValue, setScanValue] = useState<string>("Nothing scanned.");
   const instance = useRef(BluetoothService.getInstance());
+
+  useEffect(() => {
+    const callBack = async () => {
+      await requestMultiple([
+        PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+        PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+        PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE
+      ]);
+    }
+
+    callBack();
+  }, []);
 
   return (
     <View style={styles.container}>
