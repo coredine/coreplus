@@ -18,7 +18,6 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
 
     toCheckoutPage = (): void => {
         console.log("TO CHECKOUT PAGE");
-        //this.props.navigation.navigate("Home");
     }
 
     render(): ReactNode {
@@ -33,7 +32,7 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
                     </View>
                 </View>
 
-                <CheckoutButtons backOnpress={undefined} proceedOnpress={this.toCheckoutPage} proceedText={"Checkout"} grayedOut={false}/>
+                <CheckoutButtons backOnPress={undefined} proceedOnPress={this.toCheckoutPage} proceedText={"Checkout"} grayedOut={false}/>
             </View>
         )
     }

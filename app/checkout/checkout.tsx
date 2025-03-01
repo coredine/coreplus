@@ -125,7 +125,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
                     {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <CheckoutButtons proceedOnpress={this.proceed} backOnpress={undefined} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
+                <CheckoutButtons proceedOnPress={this.proceed} backOnPress={undefined} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
             </View>
         )
     }

@@ -1,5 +1,5 @@
 import { Component, ReactNode } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { PageTitle } from "../components/pageTitle";
 
 export enum PageState {
@@ -8,8 +8,8 @@ export enum PageState {
 }
 
 export interface LoginSignupPropreties {
-    redirect?: String;
     initialPageState?: PageState;
+    onSuccessfulSubmit?: () => void;
 }
 
 export interface LoginSignupStates {
@@ -32,7 +32,25 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
     render(): ReactNode {
         return(
             <View>
-                <PageTitle title={""}/>
+                <PageTitle title={PageState.LOGIN ? "Login" : "Signup"}/>
+
+                {/* FORM VIEW */}
+                <View>
+                    {/* FORM FIELDS */}
+                    <View>
+
+                    </View>
+
+                    {/* FORM BUTTONS */}
+                    <View>
+
+                    </View>
+                </View>
+
+                {/* OTHER BUTTONS (switch to signup) */}
+                <View>
+
+                </View>
 
             </View>
         )
