@@ -4,6 +4,7 @@ import { PaymentMethodCard } from "../../components/paymentMethodCard";
 import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fortawesome/free-brands-svg-icons";
 import { CheckoutButtons } from "../../components/checkoutButtons";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { PageTitle } from "../../components/pageTitle";
 
 export interface CheckoutProperties {
     //product array 
@@ -98,9 +99,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
     render(): ReactNode {
         return(
             <View className="w-100 h-100">
-                <View className="bg-blue-500 h-[8%]">
-                    <Text className="m-auto font-extrabold text-4xl">Payment Method</Text>
-                </View>
+                <PageTitle title="Payment Method"/>
 
                 <View className="h-[77%]">
                     <PaymentMethodCard 
