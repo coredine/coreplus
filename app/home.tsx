@@ -3,11 +3,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
-import Camera from '../components/camera';
+import Camera, { ScanMode } from '../components/camera';
 import BluetoothService from '../service/BluetoothService';
 
 export default function HomePage() {
   const [scanValue, setScanValue] = useState<string | undefined>();
+  const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
   const instance = useRef(BluetoothService.getInstance());
 
   useEffect(() => {
@@ -28,10 +29,15 @@ export default function HomePage() {
     <View style={styles.container}>
       <Text className="text-4xl font-bold text-blue-400">Coreplus&reg;</Text>
       <Text className="text-lg font-semibold">Scan QR code to connect to a SmartCart.</Text>
-      <Camera barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+      <Camera scanMode={scanMode} barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
         setScanValue(value.data);
+        setScanMode(ScanMode.NEVER);
         await instance.current.connectToDevice(value.data);
         setScanValue(undefined);
+        
+        setTimeout(() => {
+          setScanMode(ScanMode.ALWAYS);
+        }, 2000);
       }} />
 
       {scanValue ?
