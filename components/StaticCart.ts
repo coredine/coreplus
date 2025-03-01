@@ -36,6 +36,16 @@ export class StaticCart {
         return this.products.push(newProduct)
     }
 
+    public static removeProduct(sku: string){
+        let index = -1;
+        for (let i = 0; i < this.products.length; i++) {
+            if (this.products[i].sku===sku){ index = i; break; }
+        }
+        if (index>=0){ this.products.splice(index, 1); }
+        this.update();
+        return (index>=0);
+    }
+
     public static clearProductList(){
         this.update()
         this.products = []
