@@ -26,8 +26,11 @@ export default function App() {
             StaticCart.scanOff();
             if (removeMode && (removeMode.sku!=value.data)) {
               setTimeout( () => {
-                StaticCart.scanOn();
-              }, 1000);
+                setRemoveMode({title:"You scanned the wrong product!", sku:"", price:0, weight:9})
+                setTimeout( () => {
+                  StaticCart.scanOn();
+                }, 2500);
+              }, 2000);
               
               return;
             }
@@ -51,14 +54,14 @@ export default function App() {
               <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
               <View className='flex-1 justify-items' style={{...styles.overlay, justifyContent:'center'}}>
                 <Text className='py-2 text-white text-center'>Please scan the item to remove it</Text>
-                <Text className='py-2 text-white text-center'>{removeMode.title}</Text>
+                <Text className='z-100 py-2 text-white text-center'>{removeMode.title}</Text>
               </View> 
             </>): <></>}
         </SafeAreaView>
       ) } />
         {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
           <>
-            <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
+            <View className='z-15' style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
           </>
         }
     </>
