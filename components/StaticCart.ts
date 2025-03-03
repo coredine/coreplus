@@ -27,6 +27,13 @@ export class StaticCart {
     public static getScanMode(){
         return this.scanMode
     }
+    public static getTotal(){
+        let total = 0;
+        this.products.forEach( (value : Product) => {
+            total += value.price
+        })
+        return total;
+    }
 
     public static productList() : Product[]{
         return this.products;
