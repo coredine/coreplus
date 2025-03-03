@@ -24,7 +24,7 @@ export default function Camera(props:CameraProps) {
   const [lastScan, setLastScan] = useState<string>("");
 
   const barcodeTypes : BarcodeType[] = [props.barcodeType]
-  const cameraStyle = { width:props.width, height:props.height, borderRadius:props.borderRadius }
+  const cameraStyle = { width:props.width ?? "100%", height: props.height ?? "100%", borderRadius:props.borderRadius ?? 0 }
 
   if (!permission) { return <View/>; }
 
