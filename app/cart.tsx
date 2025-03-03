@@ -1,18 +1,26 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 export default function App() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
   const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
   const instance = useRef(BluetoothService.getInstance());
+
+  useEffect( () => {
+    if (!instance.current.isConnected()){
+      alert("You're not connected!")
+      router.replace("/devices")
+    }
+  }, []);
 
   StaticCart.setTrigger(trigger, setTrigger, ()=>{setRemoveMode(undefined)})
   
