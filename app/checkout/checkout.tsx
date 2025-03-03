@@ -5,6 +5,7 @@ import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fo
 import { CheckoutButtons } from "../../components/checkoutButtons";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { PageTitle } from "../../components/pageTitle";
+import { router } from "expo-router";
 
 export interface CheckoutProperties {
     //product array 
@@ -78,13 +79,14 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
     }
 
     private proceed = () => {
-        // switch (this.state.selectedOptionKey) {
-        //     case "":
-        //         break;
-        //     case "...":
-        //         break;
-        // }
-        console.log("salut")
+        switch (this.state.selectedOptionKey) {
+            case "smartCartSelected":
+                router.navigate("checkout/SmartCartPayment");
+                break;
+            default:
+                console.log("not yet implemented");
+                break;
+        }
     }
 
     private getPlatformPaymentMethodButton = (): ReactElement | null => {

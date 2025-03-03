@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { CheckoutButtons } from "../../components/checkoutButtons";
 import { PageTitle } from "../../components/pageTitle";
+import { router } from "expo-router";
 
 export interface OrderReviewProperties {
     navigation: any;
@@ -17,7 +18,7 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
     }
 
     toCheckoutPage = (): void => {
-        console.log("TO CHECKOUT PAGE");
+        router.replace("/checkout/checkout");
     }
 
     render(): ReactNode {
