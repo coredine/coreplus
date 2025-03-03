@@ -23,6 +23,10 @@ export default class BluetoothService {
         return this.instance;
     }
 
+    public isConnected(): boolean {
+        return this.device != null;
+    }
+
     async scanDevices(deviceFoundListener: (id?: string, name?: string) => void) {
         this.bleManager.startDeviceScan(null, null, (error, scannedDevice) => {
             deviceFoundListener(scannedDevice?.id, scannedDevice?.name!);
