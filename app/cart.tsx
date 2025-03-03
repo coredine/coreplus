@@ -1,44 +1,78 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
-import Camera from '../components/camera';
-import { useRef, useState } from 'react';
+import Camera, { ScanMode } from '../components/camera';
+import { useEffect, useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
-
-async function getProductBySKU(instance : BluetoothService, sku : string) : Promise<void>{
-  await instance.sendSku(sku, "ADD");
-}
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 export default function App() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
+  const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
   const instance = useRef(BluetoothService.getInstance());
 
-  StaticCart.setTrigger(trigger, setTrigger)
+  useEffect( () => {
+    if (!instance.current.isConnected()){
+      alert("You're not connected!")
+      router.replace("/home")
+    }
+  }, []);
+
+  StaticCart.setTrigger(trigger, setTrigger, ()=>{setRemoveMode(undefined)})
   
   return (
-    <ResizableComponent childOne={ ( 
-      <View style={styles.container}>
-        <Text style={styles.text}>Scanner</Text> 
-        <Camera barcodeType='code128' width={300} height={180} scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
-          console.log(value.data)
-          StaticCart.scanOff();
-          await getProductBySKU(instance.current, value.data);
-        }} />
-      </View>
-    ) } childTwo={ ( 
-      <ScrollView className='m-3 bg-gray-200 rounded-lg py-2'>
-        {productList.map( (value : Product, index) => (
-          <ProductCard key={index} picture={value?.picture} 
-            sku={value.sku} title={value.title}
-            price={value.price} weight={value.weight}
-            onPressRemove={() => {console.log("remove " + value.sku)}}
-            />
-        ))}
-      </ScrollView>
-    ) } />
+    <>
+      <ResizableComponent childOne={ ( 
+        <View style={styles.container}>
+          <Camera barcodeType='code128' scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+            console.log(value.data);
+            StaticCart.scanOff();
+            if (removeMode && (removeMode.sku!=value.data)) {
+              setTimeout( () => {
+                alert("You scanned the wrong product!");
+                StaticCart.scanOn();
+              }, 2000);
+              
+              return;
+            }
+            await instance.current.sendSku(value.data, (removeMode) ? "DEL" : "ADD");
+          } } />
+        </View>
+      ) } childTwo={ ( 
+        <SafeAreaView className='flex-1'>
+          <ScrollView className='m-3 bg-gray-200 rounded-lg'>
+            {productList.map( (value : Product, index) => (
+              <ProductCard key={index} picture={value?.picture} 
+                sku={value.sku} title={value.title}
+                price={value.price} weight={value.weight}
+                onPressRemove={() => {
+                  setRemoveMode(value);
+                }}
+                />
+            ))}
+          </ScrollView>
+          <View className='border-t-2 h-12' style={{borderColor:"lightgray"}}>
+            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
+          </View>
+          {((removeMode)) ? (<>
+              <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
+              <View className='flex-1 justify-items' style={{...styles.overlay, justifyContent:'center'}}>
+                <Text className='py-2 text-white text-center'>Please scan the item to remove it</Text>
+                <Text className='z-100 py-2 text-white text-center'>{removeMode.title}</Text>
+              </View> 
+            </>): <></>}
+        </SafeAreaView>
+      ) } />
+        {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
+          <>
+            <View className='z-15' style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
+          </>
+        }
+    </>
   );
 }
 
@@ -53,5 +87,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 2,
     backgroundColor: ""
+  },
+  overlay:{
+    position:'absolute', 
+    top:0, bottom:0, 
+    left:0, right:0
   }
 });

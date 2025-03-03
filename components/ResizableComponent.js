@@ -1,5 +1,6 @@
 import React, { Component } from 'react'; 
 import { StyleSheet, View, Dimensions, PanResponder, Animated, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /* 
     Source : https://github.com/brucelin0325/react-native-resizable-flex-panes 
@@ -38,8 +39,9 @@ export default class ResizableComponent extends Component {
 
       // When we drag the divider, set the bottomHeight (component state) again.
       onPanResponderMove: (e, gestureState) => {
+        let moveY = Math.max(gestureState.moveY, minHeight)
         this.setState({
-            bottomHeight    : gestureState.moveY > (this.state.deviceHeight - minHeight) ? minHeight : this.state.deviceHeight - gestureState.moveY,
+            bottomHeight    : moveY > (this.state.deviceHeight - minHeight) ? minHeight : this.state.deviceHeight - moveY,
             offset: e.nativeEvent.pageY
         })
       },
@@ -57,7 +59,7 @@ export default class ResizableComponent extends Component {
 
   render() {
     return ( 
-      <View style={styles.content}>
+      <SafeAreaView style={styles.content}>
 
         {/* Top View */}
         <Animated.View style = {[{minHeight: this.state.minHeight, flex: 1}, {height: this.state.topHeight}]}>
@@ -73,7 +75,7 @@ export default class ResizableComponent extends Component {
           { this.props.childTwo?this.props.childTwo:null }
         </Animated.View>
 
-      </View>
+      </SafeAreaView>
     )
   }
 }

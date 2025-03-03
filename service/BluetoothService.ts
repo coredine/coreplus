@@ -1,6 +1,7 @@
-import { BleError, BleManager, Characteristic, Device } from "react-native-ble-plx";
+import { BleError, BleManager, Characteristic, Device, UUID } from "react-native-ble-plx";
 import { Product } from "../components/Product";
 import { StaticCart } from "../components/StaticCart";
+import { router } from "expo-router";
 
 const CART_SERVICE = "1cf9e025-5cee-4558-a754-731e27e028ff";
 
@@ -25,10 +26,12 @@ export default class BluetoothService {
         return this.instance;
     }
 
-    async scanDevices(deviceFoundListener: (id?: string, name?: string) => void) {
-        this.bleManager.startDeviceScan(null, null, (error, scannedDevice) => {
-            deviceFoundListener(scannedDevice?.id, scannedDevice?.name!);
-        });
+    public isConnected(): boolean {
+        return this.device != null;
+    }
+
+    async scanBackground() {
+        return this.bleManager.startDeviceScan(null, { allowDuplicates: false }, () => {});
     }
 
     async stopScan() {
@@ -36,11 +39,28 @@ export default class BluetoothService {
     }
 
     async connectToDevice(id: string) {
-        this.device = await this.bleManager
-            .connectToDevice(id, { timeout: 5000 })
-            .then(device => device.discoverAllServicesAndCharacteristics());
+        try {
+            if (this.device) return;
+            console.log(`Trying to connect to ${id}`)
 
-        this.device?.monitorCharacteristicForService(CART_SERVICE, CH_JSON_ITEM, this.skuCallback);
+            this.device = await this.bleManager.connectToDevice(id, { timeout: 5000 });
+            await this.device?.discoverAllServicesAndCharacteristics();
+            this.device?.monitorCharacteristicForService(CART_SERVICE, CH_JSON_ITEM, this.skuCallback);
+
+            await this.stopScan();
+            console.log("Connection successful!");
+            router.replace("/cart")
+        } catch (error) {
+            if (error instanceof BleError) {
+                console.log(error);
+
+                if (error.message == "Operation was cancelled") {
+                    alert("Enable to find the SmartCart in a 5 sec delay.");
+                } else if(error.message == `Device ${id} was disconnected`) {
+                    alert("The SmartCart was disconnected.");
+                }
+            }
+        }
     }
 
     async closeConnection() {
@@ -51,7 +71,7 @@ export default class BluetoothService {
 
     public async sendSku(sku: string, action: "ADD" | "DEL") {
         StaticCart.scanOff();
-        await this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_SKU, btoa(JSON.stringify({sku, action})));
+        await this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_SKU, btoa(JSON.stringify({ sku, action })));
     }
 
     /**
@@ -61,11 +81,16 @@ export default class BluetoothService {
      */
     public async skuCallback(error: BleError | null, characteristic: Characteristic | null) {
         console.log("READING...");
-        let product : Product | number = JSON.parse(atob((await characteristic?.read())?.value!));
+        let product: Product | number = JSON.parse(atob((await characteristic?.read())?.value!));
         console.log(product);
 
-        if (typeof product !== "number"){
-            StaticCart.addProduct(product)
+        if (typeof product !== "number") {
+            if (product.action) {
+                StaticCart.removeProduct(product.sku);
+            } else {
+                StaticCart.addProduct(product);
+            }
+
         }
         StaticCart.scanOn()
     }

@@ -9,6 +9,7 @@ export interface Product {
   weight: number;
   title: string;
   picture?: string;
+  action?: "ADD" | "DEL";
 }
 
 interface ProductProps extends Product{
