@@ -29,16 +29,17 @@ export default function HomePage() {
     <View style={styles.container}>
       <Text className="text-4xl font-bold text-blue-400">Coreplus&reg;</Text>
       <Text className="text-lg font-semibold">Scan QR code to connect to a SmartCart.</Text>
-      <Camera scanMode={scanMode} barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
-        setScanValue(value.data);
-        setScanMode(ScanMode.NEVER);
-        await instance.current.connectToDevice(value.data);
-        setScanValue(undefined);
-        
-        setTimeout(() => {
-          setScanMode(ScanMode.ALWAYS);
-        }, 2000);
-      }} />
+      {(scanMode===ScanMode.ALWAYS) ?
+        <Camera scanMode={scanMode} barcodeType='qr' width={300} height={300} onBarcodeScanned={async (value: BarcodeScanningResult) => {
+          setScanValue(value.data);
+          setScanMode(ScanMode.NEVER);
+          await instance.current.connectToDevice(value.data);
+          setScanValue(undefined);
+          
+          setTimeout(() => {
+            setScanMode(ScanMode.ALWAYS);
+          }, 2000);
+        }} /> : <View style={{backgroundColor:"black", width:300, height:300}}></View>
 
       {scanValue ?
         <Text style={styles.text}>Try to connect to {scanValue}.</Text> : <></>
