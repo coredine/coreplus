@@ -5,16 +5,17 @@ import { verify } from "../service/RegexService";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export interface FormInputProperties {
-    doubleEntry?: boolean;
+    confirmationInput?: boolean;
     validationCallback?: (isValid: boolean) => void;
+    repeatValidationCallback?: (isValid: boolean) => void;
     placeHolder?: string;
     icon?: IconDefinition;
     regex?: RegExp;
     errorMessage?: string;
     hidden?: boolean;
-    height?: DimensionValue;
     backgroundColor?: ColorValue;
-    isValid?: boolean; //handled by Parent component
+    isValid?: boolean | undefined; //handled by Parent component
+    repeatIsValid?: boolean | undefined; //handled by Parent component
     label: string;
     onChangeText: (value: string) => void;
     inputValue: string; //handled by Parent component
@@ -22,13 +23,14 @@ export interface FormInputProperties {
 
 export interface FormInputStates {
     inputRef: RefObject<TextInput>;
+
 }
 
 export class FormInput extends Component<FormInputProperties, FormInputStates, any> {
     constructor(properties: FormInputProperties) {
         super(properties);
         this.state = {
-            inputRef: createRef<TextInput>()
+            inputRef: createRef<TextInput>(),
         }
     }
 
@@ -36,12 +38,17 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
         return this.props.backgroundColor ? this.props.backgroundColor : "white";
     }
 
+    private updateSecondInputState = (value: string): void => {
+        if (value !== this.props.inputValue && this.props.repeatValidationCallback) this.props.repeatValidationCallback(false);
+        else if (this.props.repeatValidationCallback) this.props.repeatValidationCallback(true);
+    }
+
     private handleChange = (value: string) => {
         this.props.onChangeText(value);
-        if (this.props.regex && this.props.validationCallback) {
-            let res = verify(value, this.props.regex);
-            this.props.validationCallback(res);
-        }
+        if (this.props.confirmationInput) 
+            this.updateSecondInputState(value);
+        if (this.props.regex && this.props.validationCallback) 
+            this.props.validationCallback(verify(value, this.props.regex));
     }
 
     private focus = () => {
@@ -50,13 +57,13 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
 
     render(): ReactNode {
         return(
-            <View className="h-auto mr-3 ml-3" style={{backgroundColor: this.getBackgroundColor()}}>
+            <View className="h-auto m-3" style={{backgroundColor: this.getBackgroundColor()}}>
                 <View className="flex-row">
-                    <View className="w-[85%]">
+                    <View style={{width: this.props.icon ? "85%" : "100%"}}>
                         <View style={{alignSelf: "flex-start", backgroundColor: this.getBackgroundColor()}} className="z-10 relative ml-[2vw] top-[1.5vh] p-1">
                             <Text className="w-auto text-blue-700">{this.props.label}</Text>
                         </View>
-                        <TextInput className="border-2 border-blue-700 h-[7vh]" onChangeText={this.handleChange} placeholder={this.props.placeHolder} secureTextEntry={this.props.hidden ? this.props.hidden : false} ref={this.state.inputRef} value={this.props.inputValue}/>
+                        <TextInput className="border-2 border-blue-700 h-[7vh]" onChangeText={this.handleChange} placeholder={this.props.placeHolder} secureTextEntry={this.props.hidden} ref={this.state.inputRef} value={this.props.inputValue}/>
                     </View>
                     {this.props.icon ? 
                         <TouchableOpacity className="w-[15%] border-2 border-blue-700 h-[7vh] mt-[2.86vh]" onPress={this.focus}>
@@ -72,6 +79,20 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                     null
                     }
                 </View>
+
+                {this.props.confirmationInput ? 
+                    <View className="min-h-[5vh]">
+                        <View style={{alignSelf: "flex-start", backgroundColor: this.getBackgroundColor()}} className="z-10 relative left-[7vw] top-[1.5vh] p-1">
+                            <Text className="w-auto text-blue-700">Repeat {this.props.label}</Text>
+                        </View>
+                        <TextInput className="border-2 border-blue-700 h-[7vh] w-[90%] m-auto" onChangeText={this.updateSecondInputState} secureTextEntry={this.props.hidden}/>
+                        <View className="min-h-[4vh]">
+                            {this.props.repeatIsValid === false ? <Text className="m-auto text-red-600 text-lg font-bold">Both fields must have the same value!</Text> : null}
+                        </View>
+                    </View>
+                    : 
+                    null
+                }
             </View>
         )
     }
