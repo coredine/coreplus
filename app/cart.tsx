@@ -50,6 +50,9 @@ export default function App() {
                 />
             ))}
           </ScrollView>
+          <View className='border-t-2 h-12' style={{borderColor:"lightgray"}}>
+            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal()} + TAX</Text>
+          </View>
           {((removeMode)) ? (<>
               <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
               <View className='flex-1 justify-items' style={{...styles.overlay, justifyContent:'center'}}>
