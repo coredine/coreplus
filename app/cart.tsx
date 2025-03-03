@@ -18,7 +18,7 @@ export default function App() {
   useEffect( () => {
     if (!instance.current.isConnected()){
       alert("You're not connected!")
-      router.replace("/devices")
+      router.replace("/home")
     }
   }, []);
 
