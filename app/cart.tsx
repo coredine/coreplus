@@ -33,10 +33,8 @@ export default function App() {
             StaticCart.scanOff();
             if (removeMode && (removeMode.sku!=value.data)) {
               setTimeout( () => {
-                setRemoveMode({title:"You scanned the wrong product!", sku:"", price:0, weight:9})
-                setTimeout( () => {
-                  StaticCart.scanOn();
-                }, 2500);
+                alert("You scanned the wrong product!");
+                StaticCart.scanOn();
               }, 2000);
               
               return;
