@@ -46,7 +46,7 @@ export default function App() {
         </View>
       ) } childTwo={ ( 
         <SafeAreaView className='flex-1'>
-          <ScrollView className='m-3 bg-gray-200 rounded-lg py-2'>
+          <ScrollView className='m-3 bg-gray-200 rounded-lg'>
             {productList.map( (value : Product, index) => (
               <ProductCard key={index} picture={value?.picture} 
                 sku={value.sku} title={value.title}
