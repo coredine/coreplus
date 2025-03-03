@@ -40,7 +40,7 @@ export default function HomePage() {
             setScanMode(ScanMode.ALWAYS);
           }, 2000);
         }} /> : <View style={{backgroundColor:"black", width:300, height:300}}></View>
-
+      }
       {scanValue ?
         <Text style={styles.text}>Try to connect to {scanValue}.</Text> : <></>
       }
