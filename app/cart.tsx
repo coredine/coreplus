@@ -56,7 +56,7 @@ export default function App() {
             ))}
           </ScrollView>
           <View className='border-t-2 h-12' style={{borderColor:"lightgray"}}>
-            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal()} + TAX</Text>
+            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
           </View>
           {((removeMode)) ? (<>
               <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
