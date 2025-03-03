@@ -13,8 +13,8 @@ interface CameraProps{
   // Maybe allowing different types would be nice?
   barcodeType: BarcodeType;
   onBarcodeScanned?: CallableFunction;
-  width?:number;
-  height?:number;
+  width?:number|string;
+  height?:number|string;
   borderRadius?:number;
   scanMode?:ScanMode;
 }
