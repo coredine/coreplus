@@ -53,7 +53,7 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
     }
 
     private reset = (): void => {
-        this.setState((prevState) => { return {...prevState, email: "", password: "", emailIsValid: false, canProceed: false, passwordIsValid: false}});
+        this.setState((prevState) => { return {...prevState, email: "", password: "", emailIsValid: undefined, canProceed: false, passwordIsValid: undefined}});
     }
 
     private updateProceedState = (): void => {
@@ -99,18 +99,23 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
                     <View className="mt-auto mb-auto">
                         <FormInput label="Email" 
                         onChangeText={(value: string) => this.updateState("email", value)} 
-                        icon={faEnvelope} regex={regexCode.EMAIL}
+                        icon={faEnvelope} 
+                        regex={regexCode.EMAIL}
                         validationCallback={(isValid: boolean) => this.updateState("emailIsValid", isValid)}
                         errorMessage="Wrong format! (...@....com)"
-                        inputValue={this.state.email}/>
+                        inputValue={this.state.email}
+                        isValid={this.state.emailIsValid}/>
 
                         <FormInput 
                         label="Password" 
                         onChangeText={(value: string) => this.updateState("password", value)} 
-                        icon={faLock} regex={regexCode.PWD} hidden={true}
+                        icon={faLock} 
+                        regex={regexCode.PWD} 
+                        hidden={true}
                         validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}
                         errorMessage="Wrong format! (Aa1_)"
-                        inputValue={this.state.password}/>
+                        inputValue={this.state.password}
+                        isValid={this.state.passwordIsValid}/>
 
                         <View className="flex-row-reverse min-h-[5vh]">
                                 {this.isLogin() ? 

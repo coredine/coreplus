@@ -14,22 +14,21 @@ export interface FormInputProperties {
     hidden?: boolean;
     height?: DimensionValue;
     backgroundColor?: ColorValue;
+    isValid?: boolean; //handled by Parent component
     label: string;
     onChangeText: (value: string) => void;
-    inputValue: string;
+    inputValue: string; //handled by Parent component
 }
 
 export interface FormInputStates {
     inputRef: RefObject<TextInput>;
-    regexCheck: boolean | undefined;
 }
 
 export class FormInput extends Component<FormInputProperties, FormInputStates, any> {
     constructor(properties: FormInputProperties) {
         super(properties);
         this.state = {
-            inputRef: createRef<TextInput>(),
-            regexCheck: undefined
+            inputRef: createRef<TextInput>()
         }
     }
 
@@ -42,7 +41,6 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
         if (this.props.regex && this.props.validationCallback) {
             let res = verify(value, this.props.regex);
             this.props.validationCallback(res);
-            this.setState({...this.state, regexCheck: res});
         }
     }
 
@@ -68,7 +66,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                     null}
                 </View>
                 <View className="min-h-[4vh]">
-                    {this.props.errorMessage && this.state.regexCheck === false ? 
+                    {this.props.errorMessage && this.props.isValid === false ? 
                         <Text className="m-auto text-red-600 text-lg font-bold">{this.props.errorMessage}</Text> 
                     : 
                     null
