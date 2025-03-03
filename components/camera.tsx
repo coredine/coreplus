@@ -15,6 +15,7 @@ interface CameraProps{
   onBarcodeScanned?: CallableFunction;
   width?:number;
   height?:number;
+  borderRadius?:number;
   scanMode?:ScanMode;
 }
 
@@ -23,7 +24,7 @@ export default function Camera(props:CameraProps) {
   const [lastScan, setLastScan] = useState<string>("");
 
   const barcodeTypes : BarcodeType[] = [props.barcodeType]
-  const cameraStyle = { width:props.width, height:props.height }
+  const cameraStyle = { width:props.width, height:props.height, borderRadius:props.borderRadius }
 
   if (!permission) { return <View/>; }
 
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
   },
   cameraContainer:{
     borderWidth:2,
-    borderRadius:20,
     borderCurve:'circular'
   },
   message: {
