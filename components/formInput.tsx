@@ -10,6 +10,7 @@ export interface FormInputProperties {
     placeHolder?: string;
     icon?: IconDefinition;
     regex?: RegExp;
+    errorMessage?: string;
     hidden?: boolean;
     height?: DimensionValue;
     backgroundColor?: ColorValue;
@@ -18,14 +19,16 @@ export interface FormInputProperties {
 }
 
 export interface FormInputStates {
-    inputRef: RefObject<TextInput>
+    inputRef: RefObject<TextInput>;
+    regexCheck: boolean | undefined;
 }
 
 export class FormInput extends Component<FormInputProperties, FormInputStates, any> {
     constructor(properties: FormInputProperties) {
         super(properties);
         this.state = {
-            inputRef: createRef<TextInput>()
+            inputRef: createRef<TextInput>(),
+            regexCheck: undefined
         }
     }
 
@@ -35,7 +38,11 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
 
     private handleChange = (value: string) => {
         this.props.onChangeText(value);
-        if (this.props.regex && this.props.validationCallback) this.props.validationCallback(verify(value, this.props.regex));
+        if (this.props.regex && this.props.validationCallback) {
+            let res = verify(value, this.props.regex);
+            this.props.validationCallback(res);
+            this.setState({...this.state, regexCheck: res});
+        }
     }
 
     private focus = () => {
@@ -44,7 +51,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
 
     render(): ReactNode {
         return(
-            <View className="h-auto m-2" style={{backgroundColor: this.getBackgroundColor()}}>
+            <View className="h-auto mr-3 ml-3" style={{backgroundColor: this.getBackgroundColor()}}>
                 <View className="flex-row">
                     <View className="w-[85%]">
                         <View style={{alignSelf: "flex-start", backgroundColor: this.getBackgroundColor()}} className="z-10 relative ml-[2vw] top-[1.5vh] p-1">
@@ -58,6 +65,13 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                         </TouchableOpacity> 
                     : 
                     null}
+                </View>
+                <View className="min-h-[4vh]">
+                    {this.props.errorMessage && this.state.regexCheck === false ? 
+                        <Text className="m-auto text-red-600 text-lg font-bold">{this.props.errorMessage}</Text> 
+                    : 
+                    null
+                    }
                 </View>
             </View>
         )

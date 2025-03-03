@@ -57,17 +57,17 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
             }
         });
     }
-
+    
     private submit = async () => {
-        switch (this.state.pageState) {
-            case PageState.LOGIN:
-                //send login data
-                break;
-            case PageState.SIGNUP:
-                //send signup data
-                break;
-            default:
-                break;
+        if (this.state.emailIsValid && this.state.passwordIsValid) {
+            switch (this.state.pageState) {
+                case PageState.LOGIN:
+                    console.log("LOGIN..........")
+                    break;
+                case PageState.SIGNUP:
+                    console.log("SIGNUP..........")
+                    break;
+            }
         }
     }
 
@@ -83,18 +83,20 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
                         <FormInput label="Email" 
                         onChangeText={(value: string) => this.updateState("email", value)} 
                         icon={faEnvelope} regex={regexCode.EMAIL}
-                        validationCallback={(isValid: boolean) => this.updateState("emailIsValid", isValid)}/>
+                        validationCallback={(isValid: boolean) => this.updateState("emailIsValid", isValid)}
+                        errorMessage="Wrong format! (...@....com)"/>
 
                         <FormInput 
                         label="Password" 
                         onChangeText={(value: string) => this.updateState("password", value)} 
                         icon={faLock} regex={regexCode.PWD} hidden={true}
-                        validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}/>
+                        validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}
+                        errorMessage="Wrong format! (Aa1_)"/>
 
                         <View className="flex-row-reverse min-h-[5vh]">
                                 {this.isLogin() ? 
                                     <TouchableOpacity className="mr-[3vw]">
-                                        <Text>Forgot Password</Text>
+                                        <Text className="text-blue-700">Forgot Password</Text>
                                     </TouchableOpacity> 
                                 : 
                                 null
@@ -106,7 +108,7 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
 
                 <View className="h-auto mt-[8vh]">
                     <View className="h-auto">
-                        <TouchableOpacity className="border-2 w-[90vw] h-[7vh] rounded-xl m-auto border-blue-700 bg-blue-500">
+                        <TouchableOpacity className="border-2 w-[90vw] h-[7vh] rounded-xl m-auto border-blue-700 bg-blue-500" onPress={this.submit}>
                             <Text className="m-auto text-2xl">Continue</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="mr-auto ml-auto mt-2 w-auto" onPress={this.switchState}>
