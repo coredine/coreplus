@@ -16,6 +16,7 @@ export interface FormInputProperties {
     backgroundColor?: ColorValue;
     label: string;
     onChangeText: (value: string) => void;
+    inputValue: string;
 }
 
 export interface FormInputStates {
@@ -57,7 +58,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                         <View style={{alignSelf: "flex-start", backgroundColor: this.getBackgroundColor()}} className="z-10 relative ml-[2vw] top-[1.5vh] p-1">
                             <Text className="w-auto text-blue-700">{this.props.label}</Text>
                         </View>
-                        <TextInput className="border-2 border-blue-700 h-[7vh]" onChangeText={this.handleChange} placeholder={this.props.placeHolder} secureTextEntry={this.props.hidden ? this.props.hidden : false} ref={this.state.inputRef}/>
+                        <TextInput className="border-2 border-blue-700 h-[7vh]" onChangeText={this.handleChange} placeholder={this.props.placeHolder} secureTextEntry={this.props.hidden ? this.props.hidden : false} ref={this.state.inputRef} value={this.props.inputValue}/>
                     </View>
                     {this.props.icon ? 
                         <TouchableOpacity className="w-[15%] border-2 border-blue-700 h-[7vh] mt-[2.86vh]" onPress={this.focus}>

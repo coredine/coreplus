@@ -21,6 +21,7 @@ export interface LoginSignupStates {
     emailIsValid: boolean | undefined;
     passwordIsValid: boolean | undefined;
     pageState: PageState;
+    canProceed: boolean;
 }
 
 export default class LoginSignup extends Component<LoginSignupPropreties, LoginSignupStates, any> {
@@ -31,7 +32,8 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
             password: "",
             emailIsValid: undefined,
             passwordIsValid: undefined,
-            pageState: this.props.initialPageState ? this.props.initialPageState : PageState.LOGIN
+            pageState: this.props.initialPageState ? this.props.initialPageState : PageState.LOGIN,
+            canProceed: false
         }
     }
 
@@ -44,30 +46,45 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
         return this.state.pageState == PageState.LOGIN;
     }
 
-    private switchState = () => {
+    private switchState = (): void => {
         if (this.state.pageState == PageState.LOGIN) this.setState({pageState: PageState.SIGNUP});
         else this.setState({pageState: PageState.LOGIN});
+        this.reset();
     }
 
-    private updateState = (fieldName: string, value: string | boolean) => {
+    private reset = (): void => {
+        this.setState((prevState) => { return {...prevState, email: "", password: "", emailIsValid: false, canProceed: false, passwordIsValid: false}});
+    }
+
+    private updateProceedState = (): void => {
+        if (this.state.emailIsValid && this.state.passwordIsValid) this.setState((prevState: Readonly<LoginSignupStates>) => {return {...prevState, canProceed: true}});
+        else this.setState((prevState: Readonly<LoginSignupStates>) => {return {...prevState, canProceed: false}});
+    }
+
+    private updateState = (fieldName: string, value: string | boolean | undefined) => {
         this.setState((prevState: Readonly<LoginSignupStates>) => {
             return {
-                ...prevState, //...this.state takes the current state, ...prevStates specifically takes the previous state
+                ...prevState,
                 [fieldName]: value
             }
         });
+        this.updateProceedState();
     }
     
     private submit = async () => {
-        if (this.state.emailIsValid && this.state.passwordIsValid) {
-            switch (this.state.pageState) {
-                case PageState.LOGIN:
-                    console.log("LOGIN..........")
-                    break;
-                case PageState.SIGNUP:
-                    console.log("SIGNUP..........")
-                    break;
+        try {
+            if (this.state.emailIsValid && this.state.passwordIsValid) {
+                switch (this.state.pageState) {
+                    case PageState.LOGIN:
+                        console.log("LOGIN..........")
+                        break;
+                    case PageState.SIGNUP:
+                        console.log("SIGNUP..........")
+                        break;
+                }
             }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -84,14 +101,16 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
                         onChangeText={(value: string) => this.updateState("email", value)} 
                         icon={faEnvelope} regex={regexCode.EMAIL}
                         validationCallback={(isValid: boolean) => this.updateState("emailIsValid", isValid)}
-                        errorMessage="Wrong format! (...@....com)"/>
+                        errorMessage="Wrong format! (...@....com)"
+                        inputValue={this.state.email}/>
 
                         <FormInput 
                         label="Password" 
                         onChangeText={(value: string) => this.updateState("password", value)} 
                         icon={faLock} regex={regexCode.PWD} hidden={true}
                         validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}
-                        errorMessage="Wrong format! (Aa1_)"/>
+                        errorMessage="Wrong format! (Aa1_)"
+                        inputValue={this.state.password}/>
 
                         <View className="flex-row-reverse min-h-[5vh]">
                                 {this.isLogin() ? 
@@ -108,7 +127,7 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
 
                 <View className="h-auto mt-[8vh]">
                     <View className="h-auto">
-                        <TouchableOpacity className="border-2 w-[90vw] h-[7vh] rounded-xl m-auto border-blue-700 bg-blue-500" onPress={this.submit}>
+                        <TouchableOpacity className="border-2 w-[90vw] h-[7vh] rounded-xl m-auto border-blue-700 bg-blue-500" onPress={this.submit} style={{opacity: this.state.canProceed ? 1 : 0.30}}>
                             <Text className="m-auto text-2xl">Continue</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="mr-auto ml-auto mt-2 w-auto" onPress={this.switchState}>
