@@ -16,6 +16,7 @@ export default function App() {
       <TempLink path="/cart" label="Cart" />
       <TempLink path="/checkout/orderReview" label='Review'></TempLink>
       <TempLink path="/checkout/checkout" label='Checkout'></TempLink>
+      <TempLink path="/loginSignup" label='LoginSignup'></TempLink>
     </View>
   );
 }

@@ -1,6 +1,9 @@
-import { Component, ReactNode } from "react";
+import { Component, ReactNode, RefObject } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { PageTitle } from "../components/pageTitle";
+import { verify, regexCode } from "../service/RegexService";
+import { FormInput } from "../components/formInput";
+import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 export enum PageState {
     LOGIN,
@@ -15,6 +18,8 @@ export interface LoginSignupPropreties {
 export interface LoginSignupStates {
     email: string;
     password: string;
+    emailIsValid: boolean | undefined;
+    passwordIsValid: boolean | undefined;
     pageState: PageState;
 }
 
@@ -24,34 +29,92 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
         this.state = {
             email: "",
             password: "",
+            emailIsValid: undefined,
+            passwordIsValid: undefined,
             pageState: this.props.initialPageState ? this.props.initialPageState : PageState.LOGIN
         }
     }
 
+    componentDidUpdate(prevProps: Readonly<LoginSignupPropreties>, prevState: Readonly<LoginSignupStates>, snapshot?: any): void {
+        console.log(this.state.email);
+        console.log(this.state.emailIsValid);
+    }
+
+    private isLogin = (): boolean => {
+        return this.state.pageState == PageState.LOGIN;
+    }
+
+    private switchState = () => {
+        if (this.state.pageState == PageState.LOGIN) this.setState({pageState: PageState.SIGNUP});
+        else this.setState({pageState: PageState.LOGIN});
+    }
+
+    private updateState = (fieldName: string, value: string | boolean) => {
+        this.setState((prevState: Readonly<LoginSignupStates>) => {
+            return {
+                ...prevState, //...this.state takes the current state, ...prevStates specifically takes the previous state
+                [fieldName]: value
+            }
+        });
+    }
+
+    private submit = async () => {
+        switch (this.state.pageState) {
+            case PageState.LOGIN:
+                //send login data
+                break;
+            case PageState.SIGNUP:
+                //send signup data
+                break;
+            default:
+                break;
+        }
+    }
 
     render(): ReactNode {
         return(
-            <View>
-                <PageTitle title={PageState.LOGIN ? "Login" : "Signup"}/>
+            <View className="w-full h-full">
+                <View className="h-[10vh]">
+                    <Text className="text-5xl font-semibold mt-auto mb-auto ml-[3vw]">{this.isLogin() ? "Login" : "Signup"}</Text>
+                </View>
 
-                {/* FORM VIEW */}
-                <View>
-                    {/* FORM FIELDS */}
-                    <View>
+                <View className="h-auto min-h-[30vh]">
+                    <View className="mt-auto mb-auto">
+                        <FormInput label="Email" 
+                        onChangeText={(value: string) => this.updateState("email", value)} 
+                        icon={faEnvelope} regex={regexCode.EMAIL}
+                        validationCallback={(isValid: boolean) => this.updateState("emailIsValid", isValid)}/>
 
-                    </View>
+                        <FormInput 
+                        label="Password" 
+                        onChangeText={(value: string) => this.updateState("password", value)} 
+                        icon={faLock} regex={regexCode.PWD} hidden={true}
+                        validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}/>
 
-                    {/* FORM BUTTONS */}
-                    <View>
+                        <View className="flex-row-reverse min-h-[5vh]">
+                                {this.isLogin() ? 
+                                    <TouchableOpacity className="mr-[3vw]">
+                                        <Text>Forgot Password</Text>
+                                    </TouchableOpacity> 
+                                : 
+                                null
+                                }
+                        </View> 
 
                     </View>
                 </View>
 
-                {/* OTHER BUTTONS (switch to signup) */}
-                <View>
-
+                <View className="h-auto mt-[8vh]">
+                    <View className="h-auto">
+                        <TouchableOpacity className="border-2 w-[90vw] h-[7vh] rounded-xl m-auto border-blue-700 bg-blue-500">
+                            <Text className="m-auto text-2xl">Continue</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity className="mr-auto ml-auto mt-2 w-auto" onPress={this.switchState}>
+                            <Text className="text-lg text-blue-700">{this.state.pageState == PageState.LOGIN ? "Register now" : "Already have an account?"}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-
+                
             </View>
         )
     }

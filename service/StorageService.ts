@@ -2,7 +2,7 @@ import { AsyncStorageStatic } from "@react-native-async-storage/async-storage";
 
 export default class Storage {
 
-    private static key = "auth";
+    private static key = "customerAuth";
 
     static async setAuthToken(token: String): Promise<void> {
         
