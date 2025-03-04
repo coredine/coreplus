@@ -56,6 +56,7 @@ export default class BluetoothService {
 
             await this.stopScan();
             console.log("Connection successful!");
+            this.sendAppState(AppState.SCANNING);
             router.replace("/cart")
         } catch (error) {
             if (error instanceof BleError) {
