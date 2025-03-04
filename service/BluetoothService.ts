@@ -12,9 +12,10 @@ const CH_ORDER = "d923866a-17d1-4dee-829d-426e6b57e2b3";
 const CH_PAYMENT_INFOS = "0d3401a6-2d29-427d-9a0d-87dd46b302a4";
 
 export enum AppState {
-    SCANNING = "SCANNING",
-    CHECKOUT = "CHECKOUT",
-    END = "END"
+    IDLE = 0,
+    SCANNING = 1,
+    CHECKOUT = 2,
+    END = 3
 }
 
 export default class BluetoothService {
@@ -102,7 +103,7 @@ export default class BluetoothService {
     }
 
     public async sendAppState(state: AppState) {
-        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_APP_STATE, btoa(state));
+        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_APP_STATE, btoa(String(state)));
     }
 
     public async sendPaymentInfos(email: string, password: string) {
