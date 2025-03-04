@@ -11,6 +11,12 @@ const CH_APP_STATE = "a4ee0286-6010-46b6-8d21-602f1ee38d71";
 const CH_ORDER = "d923866a-17d1-4dee-829d-426e6b57e2b3";
 const CH_PAYEMENT_INFOS = "0d3401a6-2d29-427d-9a0d-87dd46b302a4";
 
+export enum AppState {
+    SCANNING = "SCANNING",
+    CHECKOUT = "CHECKOUT",
+    END = "END"
+}
+
 export default class BluetoothService {
     private device?: Device;
     private bleManager = new BleManager();
@@ -93,5 +99,9 @@ export default class BluetoothService {
 
         }
         StaticCart.scanOn()
+    }
+
+    public async sendAppState(state: AppState) {
+        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_APP_STATE, btoa(state));
     }
 }
