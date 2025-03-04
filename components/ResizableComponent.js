@@ -19,7 +19,7 @@ export default class ResizableComponent extends Component {
       isDividerClicked: false,
 
       dividerHeight : this.props.dividerHeight ? this.props.dividerHeight : 12,
-      minHeight : this.props.minHeight ? this.props.minHeight : 240,
+      minHeight : this.props.minHeight ? this.props.minHeight : 230,
       startingHeight : this.props.startingHeight ? this.props.startingHeight : 1000,
 
       pan             : new Animated.ValueXY()
