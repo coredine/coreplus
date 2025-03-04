@@ -1,24 +1,25 @@
 import { Component, ReactNode } from "react";
-import { Modal, Text, TouchableOpacity, View, FlatList } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { View} from "react-native";
 import { CheckoutButtons } from "../../components/checkoutButtons";
 import { PageTitle } from "../../components/pageTitle";
 import { router } from "expo-router";
+import { StaticCart } from "../../components/StaticCart";
+import ProductCard, { Product } from "../../components/Product";
 
-export interface OrderReviewProperties {
-    navigation: any;
-    //array of products
+export interface OrderReviewStates {
+    productList: Product[]
 }
 
-export default class OrderReview extends Component<OrderReviewProperties, any, any> {
-    constructor(properties: OrderReviewProperties) {
+export default class OrderReview extends Component<any, OrderReviewStates, any> {
+    constructor(properties: any) {
         super(properties);
-        this.state = {}
+        this.state = {
+            productList: StaticCart.productList()
+        }
     }
 
     toCheckoutPage = (): void => {
-        router.replace("/checkout/checkout");
+        router.navigate("/checkout/checkout");
     }
 
     render(): ReactNode {
@@ -28,8 +29,16 @@ export default class OrderReview extends Component<OrderReviewProperties, any, a
 
                 <View className="h-[77%]">
                     <View className="bg-gray-200 h-[95%] w-5/6 m-auto rounded-lg">
-                        <Text>ARRAY....</Text>
-                        {/* <FlatList/> of ProductCard */}
+                        {this.state.productList.map((value : Product, index) => (
+                            <ProductCard key={index} 
+                            picture={value?.picture} 
+                            sku={value.sku} 
+                            title={value.title}
+                            price={value.price} 
+                            weight={value.weight}
+                            onPressRemove={() => {}}
+                            />
+                        ))}
                     </View>
                 </View>
 
