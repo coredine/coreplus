@@ -4,6 +4,9 @@ import Storage from "../../service/StorageService";
 import { router } from "expo-router";
 import { OrderData } from "../../components/OrderData";
 import { StaticCart } from "../../components/StaticCart";
+import { FormInput } from "../../components/formInput";
+import { faEnvelope, faL, faLock } from "@fortawesome/free-solid-svg-icons";
+import { CheckoutButtons } from "../../components/checkoutButtons";
 
 export interface SmartCartPaymentStates {
     wasSuccessful: boolean | undefined;
@@ -19,19 +22,6 @@ export default class SmartCartPayment extends Component<any, SmartCartPaymentSta
         }
     }
 
-    private checkAuth = async () => {
-        try {
-            let tk: string | null = await Storage.getAuthToken();
-            if (!tk) {
-                //router.push("/loginSignup");
-            } else {
-                //call checktoken and get email/currentBalance
-            }
-        } catch (error: unknown) {
-            console.log(error);
-        }
-    }
-
     /**
      * 
      */
@@ -43,15 +33,13 @@ export default class SmartCartPayment extends Component<any, SmartCartPaymentSta
         }
     }
 
-    componentDidMount(): void {
-        this.checkAuth();
-    }
-
     render(): ReactNode {
         return(
             <View>
                 <View className="bg-gray-300 h-[95%] w-[95%] m-auto rounded-2xl">
-                    
+                    <FormInput label="Email" onChangeText={(value: string) => {}} icon={faEnvelope} inputValue={this.state.orderData.email}/>
+                    <FormInput label="Password" onChangeText={(value: string) => {}} icon={faLock} inputValue={this.state.orderData.password} hidden={true}/>
+                    <CheckoutButtons backOnPress={undefined} proceedOnPress={this.pay} grayedOut={false} proceedText={"Pay"}/>
                 </View>
             </View>
         )

@@ -13,10 +13,8 @@ export default function App() {
     <View className="flex flex-row justify-center items-center gap-3">
       <TempLink path="/home" label="Home" />
       <TempLink path="/cart" label="Cart" />
-      <TempLink path="/checkout/orderReview" label='Review'></TempLink>
-      <TempLink path="/checkout/SmartCartPayment" label='SmartCartPayment'></TempLink>
-      <TempLink path="/checkout/checkout" label='Checkout'></TempLink>
-      <TempLink path="/loginSignup" label='LoginSignup'></TempLink>
+      <TempLink path="/checkout" label="Checkout" />
+      <TempLink path="/test" label="Test" />
     </View>
   );
 }
