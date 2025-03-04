@@ -67,8 +67,12 @@ export default class ResizableComponent extends Component {
         </Animated.View>
 
         {/* Divider */}
-        <View style={[{height: this.state.dividerHeight}, this.state.isDividerClicked ? {backgroundColor: '#666'} : {backgroundColor: '#e2e2e2'}]} 
-          { ...this._panResponder.panHandlers } />
+        <View style={[{height: this.state.dividerHeight, justifyContent:"center"}, this.state.isDividerClicked ? {backgroundColor: '#888'} : {backgroundColor: '#e2e2e2'}]} 
+          { ...this._panResponder.panHandlers }>
+            <View style={[{alignSelf:'center', justifyContent:"center", height:25, width:70}, this.state.isDividerClicked ? {backgroundColor: '#aaa'} : {backgroundColor: '#eeeeee'}]}> 
+            <View style={[{alignSelf:'center', height:8, width:50}, this.state.isDividerClicked ? {backgroundColor: '#777'} : {backgroundColor: '#bbbbbb'}]}/> 
+            </View>
+        </View>
 
         {/* Bottom View */}
         <Animated.View style={[{minHeight: this.state.minHeight}, {height: this.state.bottomHeight}]} >
