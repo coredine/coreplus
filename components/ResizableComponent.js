@@ -14,7 +14,7 @@ export default class ResizableComponent extends Component {
     this.state = {
       offset          : 0,
       topHeight       : minHeight, // min height for top pane header
-      bottomHeight    : minHeight, // min height for bottom pane header,
+      bottomHeight    : Dimensions.get('window').height-minHeight, // min height for bottom pane header,
       deviceHeight    : Dimensions.get('window').height,
       isDividerClicked: false,
 
