@@ -10,6 +10,10 @@ export default function Test() {
             console.log("Trying to send new app state.");
             await instance.current.sendAppState(AppState.END);
             console.log("Sended successfuly.");
+
+            console.log("Trying to send new payment info.");
+            await instance.current.sendPaymentInfos("smartcart", "smartcart");
+            console.log("Sended successfuly.");
         };
 
         callback();
