@@ -53,6 +53,7 @@ export default class BluetoothService {
             this.device = await this.bleManager.connectToDevice(id, { timeout: 5000 });
             await this.device?.discoverAllServicesAndCharacteristics();
             this.device?.monitorCharacteristicForService(CART_SERVICE, CH_JSON_ITEM, this.skuCallback);
+            this.device?.monitorCharacteristicForService(CART_SERVICE, CH_CHECKOUT, this.checkoutCallback);
 
             await this.stopScan();
             console.log("Connection successful!");
@@ -109,5 +110,11 @@ export default class BluetoothService {
 
     public async sendPaymentInfos(email: string, password: string) {
         return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_CHECKOUT, btoa(JSON.stringify({ email, password })));
+    }
+
+    public async checkoutCallback(error: BleError | null, characteristic: Characteristic | null) {
+        console.log("READING...");
+        let responseBody = JSON.parse(atob((await characteristic?.read())?.value!));
+        console.log(responseBody);
     }
 }
