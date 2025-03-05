@@ -19,7 +19,7 @@ export default function SmartCartPayment() {
     const [orderData, setOrderData] = useState({email: "", password: ""});
     const [refresh, setRefresh] = useState(false);
     const [checkoutCompleted, setCheckoutCompleted] = useState(false);
-    //to trigger rerenders
+    //to trigger rerenders with publisher
     const [componentOrderResponse, setComponentOrderResponse] = useState<OrderResponse>({
         receiptData: null,
         status: null,
@@ -33,8 +33,11 @@ export default function SmartCartPayment() {
             setRefresh(!refresh);
         });
         checkoutStateObject.current.setErrorMessageCallback((value: string | null) => setComponentOrderResponse((prevState) => {return {...prevState, errorMessage: value}}));
-        checkoutStateObject.current.setStatusCallback((value: OrderStatus | null) => setComponentOrderResponse((prevState) => {return {...prevState, status: value}}));
         checkoutStateObject.current.setReceiptDataCallback((value: ReceiptData | null) => setComponentOrderResponse((prevState) => {return {...prevState, receiptData: value}}));
+        checkoutStateObject.current.setStatusCallback(async (value: OrderStatus | null) => {
+            await checkCompletion(value);
+            setComponentOrderResponse((prevState) => {return {...prevState, status: value}})
+        });
     }
 
     /**
@@ -54,16 +57,15 @@ export default function SmartCartPayment() {
      * 
      */
     useEffect(() => {
-        console.log("RERENDER?");
-        console.log(componentOrderResponse)
+
     }, [refresh, componentOrderResponse]);
 
     const toHome = () => {
         router.replace("/home");
     }
 
-    const checkCompletion = async () => {
-        if (componentOrderResponse.status?.toString() == "ACCEPTED") {
+    const checkCompletion = async (value: OrderStatus | null) => {
+        if (value?.toString() == "ACCEPTED") {
             await instance.current.sendAppState(AppState.END);
             setCheckoutCompleted(true);
         } else {
@@ -76,7 +78,6 @@ export default function SmartCartPayment() {
         try {
             await instance.current.sendPaymentInfos(orderData.email, orderData.password);
             setRefresh(!refresh);
-            await checkCompletion();
         } catch (error: unknown) {
             console.log(error);
         } 
