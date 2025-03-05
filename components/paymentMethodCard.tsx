@@ -1,11 +1,10 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, ReactNode } from "react";
 import { View, Text, DimensionValue, TouchableOpacity } from "react-native";
 import Checkbox from "expo-checkbox";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export interface PaymentMethodCardProperties {
-    icons?: IconDefinition[] | undefined;
+    icons?: string[] | undefined;
     name: String;
     description?: String | undefined;
     height?: DimensionValue | undefined;
@@ -47,7 +46,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, an
                         <View className="flex-row-reverse w-[30%]  h-[100%]">
                             {this.props.icons.map((item, index) => (
                                 <View key={index} className="m-auto">
-                                    <FontAwesomeIcon size={40} icon={item} color="blue"/>
+                                    <FontAwesome6 size={40} name={item} color="blue"/>
                                 </View>
                             ))}
                         </View> 

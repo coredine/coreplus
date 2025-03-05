@@ -1,8 +1,5 @@
-import { Component, ReactNode } from "react";
 import { View, TouchableOpacity, Text, ColorValue } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { AnimatableNumericValue } from "react-native";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from "expo-router";
 
 export interface CheckoutButtonsProperties {
@@ -11,31 +8,27 @@ export interface CheckoutButtonsProperties {
     proceedOnPress: (() => void) | undefined;
     proceedText: String;
     backgroundColor?: ColorValue | undefined; 
+    iconSize?: number;
 }
 
-export class CheckoutButtons extends Component<CheckoutButtonsProperties, any, any> {
-    constructor(properties: CheckoutButtonsProperties) {
-        super(properties);
-    }
+export default function CheckoutButtons(props: CheckoutButtonsProperties) {
 
-    private defaultBackOnPress = () => {
+    const defaultBackOnPress = () => {
         router.back();
     }
 
-    render(): ReactNode {
-        return(
-            <View className="h-[15%] p-3" style={{backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : "white"}}>
-                <View className="m-auto flex-row">
-                    <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={this.props.backOnPress ? this.props.backOnPress : this.defaultBackOnPress}>
-                        <FontAwesomeIcon icon={faArrowLeft} size={50} style={{margin: "auto"}}/>
-                    </TouchableOpacity>
+    return(
+        <View className="h-[15%] p-3" style={{backgroundColor: props.backgroundColor ? props.backgroundColor : "white"}}>
+            <View className="m-auto flex-row">
+                <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={props.backOnPress ? props.backOnPress : defaultBackOnPress}>
+                    <AntDesign name="arrowleft" size={props.iconSize ? props.iconSize : 50} style={{margin: "auto"}}/>
+                </TouchableOpacity>
 
-                    <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={this.props.grayedOut ? undefined : this.props.proceedOnPress} style={{opacity: this.props.grayedOut ? 0.50 : 1}}>
-                        <Text className="m-auto font-extrabold">{this.props.proceedText}</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity className="bg-blue-500 w-2/5 rounded-full h-3/4 m-2" onPress={props.grayedOut ? undefined : props.proceedOnPress} style={{opacity: props.grayedOut ? 0.50 : 1}}>
+                    <Text className="m-auto font-extrabold">{props.proceedText}</Text>
+                </TouchableOpacity>
             </View>
+        </View>
 
-        )
-    }
+    )
 }

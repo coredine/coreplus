@@ -1,14 +1,11 @@
-import { Component, ReactNode, useEffect, useRef, useState } from "react";
-import { ColorValue, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Storage from "../service/StorageService";
+import { useEffect, useRef, useState } from "react";
+import { ColorValue, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { OrderData } from "../components/OrderData";
-import { StaticCart } from "../components/StaticCart";
-import { FormInput, SimpleFormInput } from "../components/formInput";
-import { faEnvelope, faL, faLock } from "@fortawesome/free-solid-svg-icons";
-import { CheckoutButtons } from "../components/checkoutButtons";
+import { SimpleFormInput } from "../components/formInput";
 import BluetoothService, { AppState } from "../service/BluetoothService";
 import { CheckoutStateObject, OrderResponse, OrderStatus, ReceiptData } from "../components/OrderResponse";
+import CheckoutButtons from "../components/checkoutButtons";
 
 export default function SmartCartPayment() {
 
@@ -16,7 +13,7 @@ export default function SmartCartPayment() {
     const checkoutStateObject = useRef(CheckoutStateObject.getInstance());
     const bgc: ColorValue = "#dce4f2";
 
-    const [orderData, setOrderData] = useState({email: "", password: ""});
+    const [orderData, setOrderData] = useState<OrderData>({email: "", password: ""});
     const [refresh, setRefresh] = useState(false);
     const [checkoutCompleted, setCheckoutCompleted] = useState(false);
     //to trigger rerenders with publisher
@@ -40,9 +37,6 @@ export default function SmartCartPayment() {
         });
     }
 
-    /**
-     * 
-     */
     useEffect(() => {
         if (!instance.current.isConnected()) router.replace("/home");
 
@@ -52,10 +46,6 @@ export default function SmartCartPayment() {
         }; toCheckoutState();
     }, []);
 
-
-    /**
-     * 
-     */
     useEffect(() => {
 
     }, [refresh, componentOrderResponse]);
@@ -90,13 +80,9 @@ export default function SmartCartPayment() {
                     <View>
                         <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
                         <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
-                        <View className="mt-[10vh] h-auto">
-                            <TouchableOpacity onPress={pay} className="w-[80%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
-                                <Text className="text-white m-auto text-2xl font-semibold">Pay</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <CheckoutButtons proceedOnPress={pay} proceedText={"Pay"}backgroundColor={bgc} iconSize={25}/>
                         <View className="mt-[2vh]">
-                            <Text className="m-auto text-red-600 text-2xl font-bold">Error: {componentOrderResponse.errorMessage}</Text>
+                            {componentOrderResponse ? <Text className="m-auto text-red-600 text-2xl font-bold">{componentOrderResponse.errorMessage}</Text> : null}
                         </View> 
                     </View>
                     : 

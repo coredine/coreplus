@@ -1,15 +1,15 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+// import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Component, createRef, ReactNode, RefObject } from "react";
 import { ColorValue, DimensionValue, ScrollView, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from "react-native";
 import { verify } from "../service/RegexService";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export interface FormInputProperties {
     confirmationInput?: boolean;
     validationCallback?: (isValid: boolean) => void;
     repeatValidationCallback?: (isValid: boolean) => void;
     placeHolder?: string;
-    icon?: IconDefinition;
+    icon?: string;
     regex?: RegExp;
     errorMessage?: string;
     hidden?: boolean;
@@ -67,7 +67,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                     </View>
                     {this.props.icon ? 
                         <TouchableOpacity className="w-[15%] border-2 border-blue-700 h-[7vh] mt-[2.86vh]" onPress={this.focus}>
-                            <FontAwesomeIcon icon={this.props.icon} size={30} style={{margin: "auto"}} color="blue"/>
+                            {/* <FontAwesomeIcon icon={this.props.icon} size={30} style={{margin: "auto"}} color="blue"/> */}
                         </TouchableOpacity> 
                     : 
                     null}

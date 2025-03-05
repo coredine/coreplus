@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { PageTitle } from "../components/pageTitle";
 import { verify, regexCode } from "../service/RegexService";
 import { FormInput } from "../components/formInput";
-import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 export enum PageState {
     LOGIN,
@@ -94,7 +93,7 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
 
                 <View className="h-auto min-h-[30vh]">
                     <View className="mt-auto mb-auto">
-                        <FormInput label="Email" 
+                        {/* <FormInput label="Email" 
                         onChangeText={(value: string) => this.updateState("email", value)} 
                         icon={faEnvelope} 
                         regex={regexCode.EMAIL}
@@ -116,7 +115,7 @@ export default class LoginSignup extends Component<LoginSignupPropreties, LoginS
                         onChangeText={(value: string) => this.updateState("password", value)} 
                         validationCallback={(isValid: boolean) => this.updateState("passwordIsValid", isValid)}
                         repeatValidationCallback={(isValid: boolean) => this.updateState("repeatPwdIsValid", isValid)}
-                        />
+                        /> */}
 
                         <View className="flex-row-reverse min-h-[5vh]">
                                 {this.isLogin() ? 

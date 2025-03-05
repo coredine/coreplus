@@ -1,9 +1,7 @@
 import { Component, ReactElement, ReactNode } from "react";
 import { View, Platform } from "react-native";
 import { PaymentMethodCard } from "../components/paymentMethodCard";
-import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fortawesome/free-brands-svg-icons";
-import { CheckoutButtons } from "../components/checkoutButtons";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import CheckoutButtons from "../components/checkoutButtons";
 import { PageTitle } from "../components/pageTitle";
 import { router } from "expo-router";
 
@@ -76,7 +74,7 @@ export default class Checkout extends Component<any, CheckoutStates, any> {
     private proceed = () => {
         switch (this.state.selectedOptionKey) {
             case "smartCartSelected":
-                router.navigate("checkout/SmartCartPayment");
+                router.navigate("/SmartCartPayment");
                 break;
             default:
                 console.log("not yet implemented");
@@ -86,9 +84,9 @@ export default class Checkout extends Component<any, CheckoutStates, any> {
 
     private getPlatformPaymentMethodButton = (): ReactElement | null => {
         if (Platform.OS == "android") 
-            return <PaymentMethodCard name={"Google Pay"} icons={[faGooglePay]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
+            return <PaymentMethodCard name={"Google Pay"} icons={["google-pay"]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
         else if (Platform.OS == "ios") 
-            return <PaymentMethodCard name={"Apple Pay"} icons={[faApplePay]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
+            return <PaymentMethodCard name={"Apple Pay"} icons={["apple-pay"]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
         return null;
     }
 
@@ -103,26 +101,26 @@ export default class Checkout extends Component<any, CheckoutStates, any> {
                     description={"SmartCart custom paying service."} 
                     name={"SmartCart"}
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, smartCartSelected: value}})}} 
-                    icons={[faCartShopping]} 
+                    icons={["cart-shopping"]} 
                     height="20%" 
                     value={this.state.options.smartCartSelected}/>
 
                     <PaymentMethodCard 
                     name={"Paypal"} 
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, paypalSelected: value}})}} 
-                    icons={[faPaypal]} 
+                    icons={["paypal"]} 
                     value={this.state.options.paypalSelected}/>
 
                     <PaymentMethodCard
                     name={"Credit Card or Debit Card"} 
                     onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, creditCardSelected: value}})}} 
-                    icons={[faCcMastercard, faCcVisa]} 
+                    icons={["cc-mastercard", "cc-visa"]} 
                     value={this.state.options.creditCardSelected}/>
 
                     {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <CheckoutButtons proceedOnPress={this.proceed} backOnPress={undefined} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
+                <CheckoutButtons proceedOnPress={this.proceed} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
             </View>
         )
     }
