@@ -22,7 +22,10 @@ export class CheckoutStateObject {
     private orderResponse: OrderResponse = {status: null, receiptData: null, errorMessage: null};
     private processing: boolean = false;
     private reRenderCallback: (() => void) | undefined;
-    private statusUpdateCallback: ((status: OrderStatus) => void) | undefined;
+
+    private statusCallback: ((status: OrderStatus | null) => void) | undefined;
+    private receiptDataCallback: ((receiptData: ReceiptData | null) => void) | undefined;
+    private errorMessageCallback: ((errorMessage: string | null) => void) | undefined;
 
 
     private constructor() {}
@@ -54,12 +57,39 @@ export class CheckoutStateObject {
     public setReRenderCallback(cb: () => void) {
         this.reRenderCallback = cb;
     }
-
+    
     public triggerReRenderCallback() {
         if (this.reRenderCallback) this.reRenderCallback();
     }
 
-    public updateStatus(status: OrderStatus) {
-        if (this.statusUpdateCallback) this.statusUpdateCallback(status);
+    //ALT
+    public setErrorMessageCallback(cb: (value: string | null) => void) {
+        this.errorMessageCallback = cb;
     }
+
+    //ALT
+    public setReceiptDataCallback(cb: (value: ReceiptData | null) => void) {
+        this.receiptDataCallback = cb;
+    }
+
+    //ALT
+    public setStatusCallback(cb: (value: OrderStatus | null) => void) {
+        this.statusCallback = cb;
+    }
+
+    //ALT
+    public updateStatus(status: OrderStatus | null) {
+        if (this.statusCallback) this.statusCallback(status);
+    }
+
+    //ALT
+    public updateErrorMessage(errorMessage: string | null) {
+        if (this.errorMessageCallback) this.errorMessageCallback(errorMessage);
+    }
+
+    //ALT
+    public updateReceiptData(receiptData: ReceiptData | null) {
+        if (this.receiptDataCallback) this.receiptDataCallback(receiptData);
+    }
+
 }

@@ -118,8 +118,10 @@ export default class BluetoothService {
     public async checkoutCallback(error: BleError | null, characteristic: Characteristic | null) {
         console.log("READING...checkoutCallback");
         let responseBody: OrderResponse = JSON.parse(atob((await characteristic?.read())?.value!));
-        BluetoothService.checkoutStateObject.setOrderResponse(responseBody);
-
+        //BluetoothService.checkoutStateObject.setOrderResponse(responseBody);
+        BluetoothService.checkoutStateObject.updateErrorMessage(responseBody.errorMessage);
+        BluetoothService.checkoutStateObject.updateReceiptData(responseBody.receiptData);
+        BluetoothService.checkoutStateObject.updateStatus(responseBody.status);
     }
     
 }

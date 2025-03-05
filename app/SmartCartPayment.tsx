@@ -8,62 +8,111 @@ import { FormInput, SimpleFormInput } from "../components/formInput";
 import { faEnvelope, faL, faLock } from "@fortawesome/free-solid-svg-icons";
 import { CheckoutButtons } from "../components/checkoutButtons";
 import BluetoothService, { AppState } from "../service/BluetoothService";
-import { CheckoutStateObject, OrderResponse, OrderStatus } from "../components/OrderResponse";
+import { CheckoutStateObject, OrderResponse, OrderStatus, ReceiptData } from "../components/OrderResponse";
 
 export default function SmartCartPayment() {
-    const [orderData, setOrderData] = useState({email: "", password: ""});
+
     const instance = useRef(BluetoothService.getInstance());
     const checkoutStateObject = useRef(CheckoutStateObject.getInstance());
-    const [processing, setProcessing] = useState(false);
-
     const bgc: ColorValue = "#dce4f2";
 
+    const [orderData, setOrderData] = useState({email: "", password: ""});
+    const [refresh, setRefresh] = useState(false);
+    const [checkoutCompleted, setCheckoutCompleted] = useState(false);
+    //to trigger rerenders
+    const [componentOrderResponse, setComponentOrderResponse] = useState<OrderResponse>({
+        receiptData: null,
+        status: null,
+        errorMessage: null
+    });
+
+
+    const setCallbacks = () => {
+        checkoutStateObject.current.setReRenderCallback(() => {
+            console.log("trigger....");
+            setRefresh(!refresh);
+        });
+        checkoutStateObject.current.setErrorMessageCallback((value: string | null) => setComponentOrderResponse((prevState) => {return {...prevState, errorMessage: value}}));
+        checkoutStateObject.current.setStatusCallback((value: OrderStatus | null) => setComponentOrderResponse((prevState) => {return {...prevState, status: value}}));
+        checkoutStateObject.current.setReceiptDataCallback((value: ReceiptData | null) => setComponentOrderResponse((prevState) => {return {...prevState, receiptData: value}}));
+    }
+
+    /**
+     * 
+     */
     useEffect(() => {
         if (!instance.current.isConnected()) router.replace("/home");
 
         const toCheckoutState = async () => {
             await instance.current.sendAppState(AppState.CHECKOUT);
-            checkoutStateObject.current.setReRenderCallback(() => {
-                console.log("trigger....");
-                console.log("FROM TRIGGER: " + checkoutStateObject.current.getErrorMessage());
-                console.log("FROM TRIGGER: " + checkoutStateObject.current.getReceiptData());
-                console.log("FROM TRIGGER: " + checkoutStateObject.current.getStatus());
-                setProcessing(!processing);
-            });
-        }
-        toCheckoutState();
+            setCallbacks();
+        }; toCheckoutState();
     }, []);
 
+
+    /**
+     * 
+     */
     useEffect(() => {
         console.log("RERENDER?");
-        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getErrorMessage());
-        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getReceiptData());
-        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getStatus());
-    }, [processing]);
+        console.log(componentOrderResponse)
+    }, [refresh, componentOrderResponse]);
+
+    const toHome = () => {
+        router.replace("/home");
+    }
+
+    const checkCompletion = async () => {
+        if (componentOrderResponse.status?.toString() == "ACCEPTED") {
+            await instance.current.sendAppState(AppState.END);
+            setCheckoutCompleted(true);
+        } else {
+            console.log(componentOrderResponse.status?.toString())
+            console.log(OrderStatus.ACCEPTED.toString())
+        }
+    }
 
     const pay = async () => {
         try {
-            setProcessing(!processing);
             await instance.current.sendPaymentInfos(orderData.email, orderData.password);
-            setProcessing(!processing);
+            setRefresh(!refresh);
+            await checkCompletion();
         } catch (error: unknown) {
             console.log(error);
-        }
+        } 
     }
 
     return(
         <View>
             <View className="h-[90vh] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
-                <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
-                <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
-                <View className="mt-[10vh] h-auto">
-                    <TouchableOpacity onPress={pay} className="w-[80%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
-                        <Text className="text-white m-auto text-2xl font-semibold">Pay</Text>
-                    </TouchableOpacity>
-                </View>
-                <View className="mt-[2vh]">
-                    {checkoutStateObject.current.getErrorMessage() ? <Text className="m-auto text-red-600 text-2xl font-bold">{checkoutStateObject.current.getErrorMessage()}</Text> : null}
-                </View>
+                {!checkoutCompleted ? 
+                    <View>
+                        <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
+                        <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
+                        <View className="mt-[10vh] h-auto">
+                            <TouchableOpacity onPress={pay} className="w-[80%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
+                                <Text className="text-white m-auto text-2xl font-semibold">Pay</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View className="mt-[2vh]">
+                            <Text className="m-auto text-red-600 text-2xl font-bold">Error: {componentOrderResponse.errorMessage}</Text>
+                        </View> 
+                    </View>
+                    : 
+                    <View className="h-[90vh] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
+                        <View className="w-[90%] h-[33%] m-2">
+                            <Text className="m-auto text-purple-600 text-3xl font-extrabold">RECEIPTDATA</Text>
+                        </View>
+                        <View className="w-[90%] h-[33%] m-2" style={{backgroundColor: bgc}}>
+                            <Text className="m-auto text-purple-600 text-3xl font-extrabold">THANKS FOR YOUR PAYMENT</Text>
+                        </View>
+                        <View className="w-[90%] h-[33%] m-2" style={{backgroundColor: bgc}}>
+                            <TouchableOpacity onPress={toHome} className="w-[50%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
+                                <Text className="text-white m-auto text-2xl font-semibold">Home</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
             </View>
         </View>
     )
