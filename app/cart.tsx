@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useEffect, useRef, useState } from 'react';
@@ -56,8 +56,11 @@ export default function App() {
                 />
             ))}
           </ScrollView>
-          <View className='border-t-2 h-12' style={{borderColor:"lightgray"}}>
-            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
+          <View className='flex flex-row justify-between border-t-2 h-13' style={{borderColor:"lightgray"}}>
+            <Text className='text-center text-xl font-semibold p-2 mt-1'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
+            <View className="flex flex-row justify-center pb-3 mr-3 mt-1" style={{opacity: productList.length <= 0 ? 0.50 : 1}}>
+              <Button title={"Ready to pay"} onPress={productList.length <= 0 ? null : () => {router.push("/checkout")}} />
+            </View>
           </View>
           {((removeMode)) ? (<>
               <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
@@ -66,9 +69,7 @@ export default function App() {
                 <Text className='z-100 py-2 text-white text-center'>{removeMode.title}</Text>
               </View> 
             </>): <></>}
-            <View className='h-[9vh]'>
-              <CheckoutButtons proceedText={"Ready to pay"} proceedOnPress={() => {router.push("/checkout")}} grayedOut={productList.length <= 0 ? true : false}/>
-            </View>
+            
         </SafeAreaView>
       ) } />
         {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
