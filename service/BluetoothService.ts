@@ -2,6 +2,7 @@ import { BleError, BleManager, Characteristic, Device, UUID } from "react-native
 import { Product } from "../components/Product";
 import { StaticCart } from "../components/StaticCart";
 import { router } from "expo-router";
+import { CheckoutStateObject, OrderResponse } from "../components/OrderResponse";
 
 const CART_SERVICE = "1cf9e025-5cee-4558-a754-731e27e028ff";
 
@@ -28,6 +29,7 @@ export default class BluetoothService {
     public static getInstance() {
         if (!this.instance) {
             this.instance = new BluetoothService();
+            CheckoutStateObject.getInstance();
         }
 
         return this.instance;
@@ -114,10 +116,23 @@ export default class BluetoothService {
 
     public async checkoutCallback(error: BleError | null, characteristic: Characteristic | null) {
         console.log("READING...");
-        let responseBody = JSON.parse(atob((await characteristic?.read())?.value!));
-        console.log(responseBody);
+        let responseBody: OrderResponse = JSON.parse(atob((await characteristic?.read())?.value!));
+        CheckoutStateObject.getInstance().setOrderResponse(responseBody);
+        console.log(responseBody.receiptData);
+        console.log(responseBody.status);
+        console.log(responseBody.errorMessage);
+        console.log("=========================");
+        console.log(CheckoutStateObject.getInstance().getStatus());
+        console.log(CheckoutStateObject.getInstance().getErrorMessage());
+        // await characteristic?.read().then((value: any) => {
+        //     if (value) {
+        //         let rep: OrderResponse = JSON.parse(atob(value));
+        //         console.log(rep);
+        //         CheckoutStateObject.getInstance().setOrderResponse(rep);
+        //     }
+        //     else console.log("value IS null");
+        // });
 
-        //
-        
     }
+    
 }

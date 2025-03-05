@@ -1,53 +1,52 @@
-import { Component, ReactNode } from "react";
-import { ColorValue, Text, TouchableOpacity, View } from "react-native";
+import { Component, ReactNode, useEffect, useRef, useState } from "react";
+import { ColorValue, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Storage from "../service/StorageService";
 import { router } from "expo-router";
 import { OrderData } from "../components/OrderData";
 import { StaticCart } from "../components/StaticCart";
-import { FormInput } from "../components/formInput";
+import { FormInput, SimpleFormInput } from "../components/formInput";
 import { faEnvelope, faL, faLock } from "@fortawesome/free-solid-svg-icons";
 import { CheckoutButtons } from "../components/checkoutButtons";
-import BluetoothService from "../service/BluetoothService";
-import { OrderResponse, OrderStatus } from "../components/OrderResponse";
+import BluetoothService, { AppState } from "../service/BluetoothService";
+import { CheckoutStateObject, OrderResponse, OrderStatus } from "../components/OrderResponse";
 
+export default function SmartCartPayment() {
+    const [orderData, setOrderData] = useState({email: "", password: ""});
+    const instance = useRef(BluetoothService.getInstance());
+    const checkoutStateObject = useRef(CheckoutStateObject.getInstance());
 
-export interface SmartCartPaymentStates {
-    orderData: OrderData;
-    bluetoohService: BluetoothService | undefined;
-}
+    const bgc: ColorValue = "#dce4f2";
 
-export default class SmartCartPayment extends Component<any, SmartCartPaymentStates, any> {
-    constructor(properties: any) {
-        super(properties);
-        this.state = {
-            orderData: {email: "", password: ""},
-            bluetoohService: undefined
+    useEffect(() => {
+        const toCheckoutState = async () => {
+            await instance.current.sendAppState(AppState.CHECKOUT);
         }
-    }
+        toCheckoutState();
+    }, []);
 
-    private bgc: ColorValue = "#818894";
-
-    /**
-     * 
-     */
-    private pay = async () => {
-        let response: OrderResponse;
+    const pay = async () => {
         try {
-            
+            await instance.current.sendPaymentInfos(orderData.email, orderData.password);
+            console.log(checkoutStateObject.current.getStatus());
         } catch (error: unknown) {
             console.log(error);
         }
     }
 
-    render(): ReactNode {
-        return(
-            <View>
-                {/* <View className="h-[95%] w-[95%] m-auto rounded-2xl" style={{backgroundColor: this.bgc}}>
-                    <FormInput label="Password" onChangeText={(value: string) => {}} icon={faLock} inputValue={this.state.orderData.password} hidden={true} backgroundColor={this.bgc}/>
-                </View> */}
-                {/* <FormInput label="Email" onChangeText={(value: string) => {}} icon={faEnvelope} inputValue={this.state.orderData.email} backgroundColor={this.bgc}/> */}
-                {/* <CheckoutButtons backOnPress={undefined} proceedOnPress={this.pay} grayedOut={false} proceedText={"Pay"} backgroundColor={this.bgc}/> */}
+    return(
+        <View>
+            <View className="h-[95%] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
+                <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
+                <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
+                <View className="mt-[10vh] h-auto">
+                    <TouchableOpacity onPress={pay} className="w-[80%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
+                        <Text className="text-white m-auto text-2xl font-semibold">Pay</Text>
+                    </TouchableOpacity>
+                </View>
+                <View className="mt-[2vh]">
+                    {checkoutStateObject.current.getErrorMessage() ? <Text className="m-auto text-red-600 text-2xl font-bold">{checkoutStateObject.current.getErrorMessage()}</Text> : null}
+                </View>
             </View>
-        )
-    }
+        </View>
+    )
 }

@@ -97,3 +97,27 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
         )
     }
 }
+
+export interface SimpleFormInputProperties {
+    backgroundColor: ColorValue | undefined;
+    onChangeText: (text: string) => void;
+    hidden: boolean;
+    value: string;
+    label: string;
+}
+
+/**
+ * @note 
+ * viewManagerResolver null exception for the other component (FormInput) when testing the app with a cable 
+ */
+export function SimpleFormInput(props: SimpleFormInputProperties) {
+
+    return(
+        <View style={{width: "85%"}} className="mr-auto ml-auto">
+            <View style={{alignSelf: "flex-start", backgroundColor: props.backgroundColor}} className="z-10 relative ml-[2vw] top-[1.5vh] p-1">
+                <Text className="w-auto text-blue-700">{props.label}</Text>
+            </View>
+            <TextInput className="border-2 border-blue-700 h-[7vh] p-2" onChangeText={(text: string) => props.onChangeText(text)} value={props.value} secureTextEntry={props.hidden}/>
+        </View>
+    )
+}

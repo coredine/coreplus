@@ -1,5 +1,5 @@
 import { Component, ReactElement, ReactNode } from "react";
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import { View, Platform } from "react-native";
 import { PaymentMethodCard } from "../components/paymentMethodCard";
 import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fortawesome/free-brands-svg-icons";
 import { CheckoutButtons } from "../components/checkoutButtons";
