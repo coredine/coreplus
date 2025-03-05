@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useEffect, useRef, useState } from 'react';
@@ -8,6 +8,7 @@ import BluetoothService from '../service/BluetoothService';
 import { StaticCart } from '../components/StaticCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import CheckoutButtons from '../components/checkoutButtons';
 
 export default function App() {
   const productList = StaticCart.productList();
@@ -65,6 +66,9 @@ export default function App() {
                 <Text className='z-100 py-2 text-white text-center'>{removeMode.title}</Text>
               </View> 
             </>): <></>}
+            <View className='h-[9vh]'>
+              <CheckoutButtons proceedText={"Ready to pay"} proceedOnPress={() => {router.push("/checkout")}} grayedOut={productList.length <= 0 ? true : false}/>
+            </View>
         </SafeAreaView>
       ) } />
         {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :

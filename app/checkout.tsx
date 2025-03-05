@@ -4,6 +4,7 @@ import { PaymentMethodCard } from "../components/paymentMethodCard";
 import CheckoutButtons from "../components/checkoutButtons";
 import { PageTitle } from "../components/pageTitle";
 import { router } from "expo-router";
+import BluetoothService from "../service/BluetoothService";
 
 export interface CheckoutStates {
     options: {
@@ -29,6 +30,10 @@ export default class Checkout extends Component<any, CheckoutStates, any> {
             selectedOptionKey: undefined,
             cannotProceed: true
         }
+    }
+
+    componentDidMount(): void {
+        if (!BluetoothService.getInstance().isConnected) router.replace("/home"); 
     }
 
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<CheckoutStates>, snapshot?: any): void {
