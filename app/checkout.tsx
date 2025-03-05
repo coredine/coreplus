@@ -1,16 +1,11 @@
 import { Component, ReactElement, ReactNode } from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
-import { PaymentMethodCard } from "../../components/paymentMethodCard";
+import { PaymentMethodCard } from "../components/paymentMethodCard";
 import { faPaypal, faCcMastercard, faCcVisa, faGooglePay, faApplePay } from "@fortawesome/free-brands-svg-icons";
-import { CheckoutButtons } from "../../components/checkoutButtons";
+import { CheckoutButtons } from "../components/checkoutButtons";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { PageTitle } from "../../components/pageTitle";
+import { PageTitle } from "../components/pageTitle";
 import { router } from "expo-router";
-
-export interface CheckoutProperties {
-    //product array 
-    //cart
-}
 
 export interface CheckoutStates {
     options: {
@@ -23,8 +18,8 @@ export interface CheckoutStates {
     cannotProceed: boolean;
 }
 
-export default class Checkout extends Component<CheckoutProperties, CheckoutStates, any> {
-    constructor(properties: CheckoutProperties) {
+export default class Checkout extends Component<any, CheckoutStates, any> {
+    constructor(properties: any) {
         super(properties);
         this.state = {
             options: {
@@ -38,7 +33,7 @@ export default class Checkout extends Component<CheckoutProperties, CheckoutStat
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<CheckoutProperties>, prevState: Readonly<CheckoutStates>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<CheckoutStates>, snapshot?: any): void {
         this.checkSingleSelect();
         this.updateProceedState();
     }

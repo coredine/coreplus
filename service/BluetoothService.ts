@@ -116,5 +116,8 @@ export default class BluetoothService {
         console.log("READING...");
         let responseBody = JSON.parse(atob((await characteristic?.read())?.value!));
         console.log(responseBody);
+
+        //
+        
     }
 }
