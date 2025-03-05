@@ -8,7 +8,7 @@ export default function Test() {
     useEffect(() => {
         const callback = async () => {
             console.log("Trying to send new app state.");
-            await instance.current.sendAppState(AppState.END);
+            await instance.current.sendAppState(AppState.CHECKOUT);
             console.log("Sended successfuly.");
 
             console.log("Trying to send new payment info.");

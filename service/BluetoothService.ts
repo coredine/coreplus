@@ -9,12 +9,13 @@ const CH_JSON_ITEM = "20507320-c712-43ed-a240-05d80fd066fd";
 const CH_SKU = "c4fa2ae9-d7f4-42ac-8042-afde6dc23568";
 const CH_APP_STATE = "a4ee0286-6010-46b6-8d21-602f1ee38d71";
 const CH_ORDER = "d923866a-17d1-4dee-829d-426e6b57e2b3";
-const CH_PAYMENT_INFOS = "0d3401a6-2d29-427d-9a0d-87dd46b302a4";
+const CH_CHECKOUT = "0d3401a6-2d29-427d-9a0d-87dd46b302a4";
 
 export enum AppState {
-    SCANNING = "SCANNING",
-    CHECKOUT = "CHECKOUT",
-    END = "END"
+    IDLE = 0,
+    SCANNING = 1,
+    CHECKOUT = 2,
+    END = 3
 }
 
 export default class BluetoothService {
@@ -52,9 +53,11 @@ export default class BluetoothService {
             this.device = await this.bleManager.connectToDevice(id, { timeout: 5000 });
             await this.device?.discoverAllServicesAndCharacteristics();
             this.device?.monitorCharacteristicForService(CART_SERVICE, CH_JSON_ITEM, this.skuCallback);
+            this.device?.monitorCharacteristicForService(CART_SERVICE, CH_CHECKOUT, this.checkoutCallback);
 
             await this.stopScan();
             console.log("Connection successful!");
+            this.sendAppState(AppState.SCANNING);
             router.replace("/cart")
         } catch (error) {
             if (error instanceof BleError) {
@@ -102,10 +105,16 @@ export default class BluetoothService {
     }
 
     public async sendAppState(state: AppState) {
-        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_APP_STATE, btoa(state));
+        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_APP_STATE, btoa(String(state)));
     }
 
     public async sendPaymentInfos(email: string, password: string) {
-        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_PAYMENT_INFOS, btoa(JSON.stringify({ email, password })));
+        return this.device?.writeCharacteristicWithResponseForService(CART_SERVICE, CH_CHECKOUT, btoa(JSON.stringify({ email, password })));
+    }
+
+    public async checkoutCallback(error: BleError | null, characteristic: Characteristic | null) {
+        console.log("READING...");
+        let responseBody = JSON.parse(atob((await characteristic?.read())?.value!));
+        console.log(responseBody);
     }
 }
