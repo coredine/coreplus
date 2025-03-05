@@ -58,6 +58,7 @@ export default function SmartCartPayment() {
         if (value?.toString() == "ACCEPTED") {
             await instance.current.sendAppState(AppState.END);
             setCheckoutCompleted(true);
+            await instance.current.closeConnection();
         } else {
             console.log(componentOrderResponse.status?.toString())
             console.log(OrderStatus.ACCEPTED.toString())
