@@ -89,7 +89,8 @@ export default function SmartCartPayment() {
                     : 
                     <View className="h-[90vh] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
                         <View className="w-[90%] h-[33%] m-2">
-                            <Text className="m-auto text-purple-600 text-3xl font-extrabold">RECEIPTDATA</Text>
+                            <Text className="m-auto text-purple-600 text-3xl font-extrabold">{componentOrderResponse.receiptData?.email}</Text>
+                            <Text className="m-auto text-purple-600 text-3xl font-extrabold">{componentOrderResponse.receiptData?.time.toString()}</Text>
                         </View>
                         <View className="w-[90%] h-[33%] m-2" style={{backgroundColor: bgc}}>
                             <Text className="m-auto text-purple-600 text-3xl font-extrabold">THANKS FOR YOUR PAYMENT</Text>
