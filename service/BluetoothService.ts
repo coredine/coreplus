@@ -23,13 +23,14 @@ export default class BluetoothService {
     private device?: Device;
     private bleManager = new BleManager();
     private static instance?: BluetoothService;
+    private static checkoutStateObject: CheckoutStateObject;
 
-    private constructor() { }
+    private constructor() {}
 
     public static getInstance() {
         if (!this.instance) {
             this.instance = new BluetoothService();
-            CheckoutStateObject.getInstance();
+            this.checkoutStateObject = CheckoutStateObject.getInstance();
         }
 
         return this.instance;
@@ -115,23 +116,9 @@ export default class BluetoothService {
     }
 
     public async checkoutCallback(error: BleError | null, characteristic: Characteristic | null) {
-        console.log("READING...");
+        console.log("READING...checkoutCallback");
         let responseBody: OrderResponse = JSON.parse(atob((await characteristic?.read())?.value!));
-        CheckoutStateObject.getInstance().setOrderResponse(responseBody);
-        console.log(responseBody.receiptData);
-        console.log(responseBody.status);
-        console.log(responseBody.errorMessage);
-        console.log("=========================");
-        console.log(CheckoutStateObject.getInstance().getStatus());
-        console.log(CheckoutStateObject.getInstance().getErrorMessage());
-        // await characteristic?.read().then((value: any) => {
-        //     if (value) {
-        //         let rep: OrderResponse = JSON.parse(atob(value));
-        //         console.log(rep);
-        //         CheckoutStateObject.getInstance().setOrderResponse(rep);
-        //     }
-        //     else console.log("value IS null");
-        // });
+        BluetoothService.checkoutStateObject.setOrderResponse(responseBody);
 
     }
     

@@ -14,20 +14,38 @@ export default function SmartCartPayment() {
     const [orderData, setOrderData] = useState({email: "", password: ""});
     const instance = useRef(BluetoothService.getInstance());
     const checkoutStateObject = useRef(CheckoutStateObject.getInstance());
+    const [processing, setProcessing] = useState(false);
 
     const bgc: ColorValue = "#dce4f2";
 
     useEffect(() => {
+        if (!instance.current.isConnected()) router.replace("/home");
+
         const toCheckoutState = async () => {
             await instance.current.sendAppState(AppState.CHECKOUT);
+            checkoutStateObject.current.setReRenderCallback(() => {
+                console.log("trigger....");
+                console.log("FROM TRIGGER: " + checkoutStateObject.current.getErrorMessage());
+                console.log("FROM TRIGGER: " + checkoutStateObject.current.getReceiptData());
+                console.log("FROM TRIGGER: " + checkoutStateObject.current.getStatus());
+                setProcessing(!processing);
+            });
         }
         toCheckoutState();
     }, []);
 
+    useEffect(() => {
+        console.log("RERENDER?");
+        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getErrorMessage());
+        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getReceiptData());
+        console.log("FROM USEEFFECT: " + CheckoutStateObject.getInstance().getStatus());
+    }, [processing]);
+
     const pay = async () => {
         try {
+            setProcessing(!processing);
             await instance.current.sendPaymentInfos(orderData.email, orderData.password);
-            console.log(checkoutStateObject.current.getStatus());
+            setProcessing(!processing);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -35,7 +53,7 @@ export default function SmartCartPayment() {
 
     return(
         <View>
-            <View className="h-[95%] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
+            <View className="h-[90vh] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
                 <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
                 <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
                 <View className="mt-[10vh] h-auto">

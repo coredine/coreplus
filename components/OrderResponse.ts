@@ -20,11 +20,15 @@ export class CheckoutStateObject {
 
     private static instance: CheckoutStateObject | null = null;
     private orderResponse: OrderResponse = {status: null, receiptData: null, errorMessage: null};
+    private processing: boolean = false;
+    private reRenderCallback: (() => void) | undefined;
+    private statusUpdateCallback: ((status: OrderStatus) => void) | undefined;
+
 
     private constructor() {}
 
     public static getInstance() {
-        if (this.instance == null) {
+        if (!this.instance) {
             this.instance = new CheckoutStateObject();
         }
         return this.instance;
@@ -32,6 +36,7 @@ export class CheckoutStateObject {
 
     public setOrderResponse(orderResponse: OrderResponse) {
         this.orderResponse = orderResponse;
+        this.triggerReRenderCallback();
     }
 
     public getStatus() {
@@ -44,5 +49,17 @@ export class CheckoutStateObject {
 
     public getReceiptData() {
         return this.orderResponse.receiptData;
+    }
+
+    public setReRenderCallback(cb: () => void) {
+        this.reRenderCallback = cb;
+    }
+
+    public triggerReRenderCallback() {
+        if (this.reRenderCallback) this.reRenderCallback();
+    }
+
+    public updateStatus(status: OrderStatus) {
+        if (this.statusUpdateCallback) this.statusUpdateCallback(status);
     }
 }
