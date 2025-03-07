@@ -2,6 +2,10 @@
 const config = {
     verbose: true,
     preset: "jest-expo",
+    // https://github.com/zoontek/react-native-permissions/issues/759#issuecomment-1496641261
+    moduleNameMapper: {
+        'react-native-permissions': '<rootDir>/node_modules/react-native-permissions/mock',
+    },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
     ],
