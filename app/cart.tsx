@@ -18,7 +18,7 @@ export default function Cart() {
 
   useEffect( () => {
     if (!instance.current.isConnected()){
-      Alert.alert("You're not connected!")
+      Alert.alert("Connection error.","No cart connected!")
       router.replace("/home")
     }
   }, []);
