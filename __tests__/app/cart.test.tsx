@@ -15,7 +15,7 @@ jest.mock('expo-router', () => ({
   router: { push: jest.fn(), replace: jest.fn() }
 }));
 
-describe("Test home page", () => {
+describe("Test cart page", () => {
   it("should render the component", () => {
     let valueToCheck = "Ready to pay";
 
