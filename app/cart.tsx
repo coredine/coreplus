@@ -1,4 +1,4 @@
-import { Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useEffect, useRef, useState } from 'react';
@@ -18,7 +18,7 @@ export default function Cart() {
 
   useEffect( () => {
     if (!instance.current.isConnected()){
-      alert("You're not connected!")
+      Alert.alert("You're not connected!")
       router.replace("/home")
     }
   }, []);
