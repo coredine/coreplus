@@ -1,7 +1,7 @@
 import { renderRouter, screen } from 'expo-router/testing-library';
-import App from '../../app/home';
+import Home from '../../app/home';
 
-const MockHomePage = jest.fn(() => <App />)
+const MockHomePage = jest.fn(() => <Home />)
 
 describe("Test home page", () => {
   it("should render the component", () => {
