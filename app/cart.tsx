@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import CheckoutButtons from '../components/checkoutButtons';
 
-export default function App() {
+export default function Cart() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
   const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
