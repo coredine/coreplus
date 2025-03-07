@@ -24,6 +24,8 @@ describe("Test home page", () => {
     }, {
     "initialUrl": "/cart"
     });
+
+    StaticCart.scanOff();
     expect(getByText(valueToCheck)).toBeDefined();
   })
 })
