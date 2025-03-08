@@ -4,7 +4,7 @@ import Checkout from '../../app/checkout';
 jest.mock("../../service/BluetoothService", () => ({
   getInstance: jest.fn( () => ({
     scanBackground: jest.fn(),
-    isConnected: jest.fn( () => false)
+    isConnected: jest.fn( () => true)
   }))
 }))
 
