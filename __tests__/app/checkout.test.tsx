@@ -13,7 +13,7 @@ jest.mock("expo-font", () => ({
   loadAsync: jest.fn()
 }))
 
-describe("Test home page", () => {
+describe("Test Checkout page", () => {
   it("should render the component", () => {
     const MockCheckoutPage = jest.fn(() => <Checkout key={1} ref={undefined} />);
     let valueToCheck = "Payment Method";
