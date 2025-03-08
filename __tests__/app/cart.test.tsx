@@ -1,6 +1,7 @@
-import { renderRouter, screen } from 'expo-router/testing-library';
+import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import Cart from '../../app/cart';
 import { StaticCart } from '../../service/StaticCart';
+import { act } from 'react';
 
 const MockCartPage = jest.fn(() => <Cart />)
 
@@ -16,6 +17,13 @@ jest.mock('expo-router', () => ({
 }));
 
 describe("Test cart page", () => {
+  beforeAll( () => {
+    StaticCart.setTrigger(5, (value:number) => (value+1), () =>{})
+
+    StaticCart.clearProductList();
+
+    StaticCart.addProduct({title:"Title",price:9.99, sku:"123456",weight:9.99})
+  })
   it("should render the component", () => {
     let valueToCheck = "Ready to pay";
 
@@ -26,6 +34,22 @@ describe("Test cart page", () => {
     });
 
     StaticCart.scanOff();
+    expect(getByText(valueToCheck)).toBeDefined();
+  })
+
+  it("should press the delete button on product", () => {
+    let valueToCheck = "Please scan the item to remove it";
+
+    const { getByText, getByTestId } = renderRouter({
+    "/cart": MockCartPage
+    }, {
+    "initialUrl": "/cart"
+    });
+
+    act(async () => {
+      fireEvent.press(getByTestId("removeProduct"));
+    });
+
     expect(getByText(valueToCheck)).toBeDefined();
   })
 })
