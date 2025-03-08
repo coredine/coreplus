@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
-import { StaticCart } from '../components/StaticCart';
+import { StaticCart } from '../service/StaticCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import CheckoutButtons from '../components/checkoutButtons';

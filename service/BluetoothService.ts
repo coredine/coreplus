@@ -1,6 +1,6 @@
 import { BleError, BleManager, Characteristic, Device, UUID } from "react-native-ble-plx";
 import { Product } from "../components/Product";
-import { StaticCart } from "../components/StaticCart";
+import { StaticCart } from "../service/StaticCart";
 import { router } from "expo-router";
 import { CheckoutStateObject, OrderResponse } from "../components/OrderResponse";
 

@@ -1,6 +1,6 @@
 import { renderRouter, screen } from 'expo-router/testing-library';
 import Cart from '../../app/cart';
-import { StaticCart } from '../../components/StaticCart';
+import { StaticCart } from '../../service/StaticCart';
 
 const MockCartPage = jest.fn(() => <Cart />)
 
