@@ -13,10 +13,10 @@ export default function SmartCartPayment() {
     const checkoutStateObject = useRef(CheckoutStateObject.getInstance());
     const bgc: ColorValue = "#dce4f2";
 
-    const [orderData, setOrderData] = useState<OrderData>({email: "", password: ""});
+    const [orderData, setOrderData] = useState<OrderData>({permanentAccountNumber: "", password: ""});
     const [refresh, setRefresh] = useState(false);
     const [checkoutCompleted, setCheckoutCompleted] = useState(false);
-    //to trigger rerenders with publisher
+
     const [componentOrderResponse, setComponentOrderResponse] = useState<OrderResponse>({
         receiptData: null,
         status: null,
@@ -67,7 +67,7 @@ export default function SmartCartPayment() {
 
     const pay = async () => {
         try {
-            await instance.current.sendPaymentInfos(orderData.email, orderData.password);
+            await instance.current.sendPaymentInfos(orderData.permanentAccountNumber, orderData.password);
             setRefresh(!refresh);
         } catch (error: unknown) {
             console.log(error);
@@ -79,7 +79,7 @@ export default function SmartCartPayment() {
             <View className="h-[90vh] w-[95%] m-auto rounded-2xl" style={{backgroundColor: bgc}}>
                 {!checkoutCompleted ? 
                     <View>
-                        <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, email: text})} value={orderData.email} label="Email"/>
+                        <SimpleFormInput backgroundColor={bgc} hidden={false} onChangeText={(text: string) => setOrderData({...orderData, permanentAccountNumber: text})} value={orderData.permanentAccountNumber} label="Card Number"/>
                         <SimpleFormInput backgroundColor={bgc} hidden={true} onChangeText={(text: string) => setOrderData({...orderData, password: text})} value={orderData.password} label="Password"/>
                         <CheckoutButtons proceedOnPress={pay} proceedText={"Pay"}backgroundColor={bgc} iconSize={25}/>
                         <View className="mt-[2vh]">
