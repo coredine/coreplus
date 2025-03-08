@@ -59,7 +59,7 @@ export default function Cart() {
           <View className='flex flex-row justify-between border-t-2 h-13' style={{borderColor:"lightgray"}}>
             <Text className='text-center text-xl font-semibold p-2 mt-1'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
             <View className="flex flex-row justify-center pb-3 mr-3 mt-1" style={{opacity: productList.length <= 0 ? 0.50 : 1}}>
-              <Button title={"Ready to pay"} onPress={productList.length <= 0 ? null : () => {router.push("/checkout")}} />
+              <Button testID='goToCheckout' title={"Ready to pay"} onPress={productList.length <= 0 ? null : () => {router.push("/checkout")}} />
             </View>
           </View>
           {((removeMode)) ? (<>
