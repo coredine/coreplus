@@ -2,6 +2,7 @@ import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import Cart from '../../app/cart';
 import { StaticCart } from '../../service/StaticCart';
 import { act } from 'react';
+import { router } from 'expo-router';
 
 const MockCartPage = jest.fn(() => <Cart />)
 
@@ -51,5 +52,19 @@ describe("Test cart page", () => {
     });
 
     expect(getByText(valueToCheck)).toBeDefined();
+  })
+
+  it("should press the checkout button", () => {
+    const { getByTestId } = renderRouter({
+      "/cart": MockCartPage
+    }, {
+      "initialUrl": "/cart"
+    });
+
+    act(() => {
+      fireEvent.press(getByTestId("goToCheckout"));
+    });
+
+    expect(router.push).toHaveBeenCalledTimes(1);
   })
 })
