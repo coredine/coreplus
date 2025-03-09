@@ -1,6 +1,7 @@
 import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import Checkout from '../../app/checkout';
 import { act } from 'react';
+import { Platform } from 'react-native';
 
 const MockCheckoutPage = jest.fn(() => <Checkout key={1} ref={undefined} />);
 
@@ -28,6 +29,7 @@ describe("Test Checkout page", () => {
     expect(getByText(valueToCheck)).toBeDefined();
   })
   it("should select payment methods and continue", () => {
+    Platform.OS = "ios"
     const { getByText, getByTestId } = renderRouter({
       "/checkout": MockCheckoutPage
     }, {
@@ -43,5 +45,29 @@ describe("Test Checkout page", () => {
     });
 
     expect(getByText("Continue")).toBeDefined();
+  })
+
+  it("should be in android pay mode", () => {
+    Platform.OS = "android"
+    
+    const { getByText, getByTestId } = renderRouter({
+      "/checkout": MockCheckoutPage
+    }, {
+      "initialUrl": "/checkout"
+    });
+
+    expect(getByTestId("Google Pay")).toBeDefined();
+  })
+  
+  it("should be in neither pay mode", () => {
+    Platform.OS = "web"
+    
+    renderRouter({
+      "/checkout": MockCheckoutPage
+    }, {
+      "initialUrl": "/checkout"
+    });
+
+    expect(screen.queryByText("Google Pay")).toBeNull();
   })
 })
