@@ -70,11 +70,13 @@ export default class Checkout extends Component<any, CheckoutStates, any> {
         this.setState({options: {...this.state.options, [selectName]: value}});
     }
 
+    /*
     private resetOptions = (): void => {
         this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
             this.setState({options: {...this.state.options, [key]: false}});
         });
     }
+    */
 
     private proceed = () => {
         switch (this.state.selectedOptionKey) {
