@@ -2,7 +2,6 @@ import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import SmartCartPayment from '../../app/SmartCartPayment';
 import { act } from 'react';
 import { router } from 'expo-router';
-import BluetoothService from '../../service/BluetoothService';
 
 const MockSmartCartPayment = jest.fn(() => <SmartCartPayment/>);
 
