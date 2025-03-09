@@ -35,6 +35,7 @@ describe("Test cart page", () => {
     });
 
     StaticCart.scanOff();
+    StaticCart.scanOn();
     expect(getByText(valueToCheck)).toBeDefined();
   })
 
@@ -66,5 +67,8 @@ describe("Test cart page", () => {
     });
 
     expect(router.push).toHaveBeenCalledTimes(1);
+  })
+  afterAll( () => {
+    StaticCart.removeProduct("123456")
   })
 })
