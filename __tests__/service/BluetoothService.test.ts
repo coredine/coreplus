@@ -3,6 +3,13 @@ import BluetoothService from "../../service/BluetoothService";
 jest.mock("react-native-ble-plx", ()=> ({
   BleError: jest.fn( () => ({})),
   BleManager: jest.fn( () => ({
+    connectToDevice: jest.fn( async () => ({
+      id:"12:34:56:78:90:AB", 
+      name:"test", 
+      discoverAllServicesAndCharacteristics: jest.fn(),
+      monitorCharacteristicForService: jest.fn(),
+      writeCharacteristicWithResponseForService: jest.fn()
+    }) ),
     startDeviceScan: jest.fn(),
     stopDeviceScan: jest.fn()
   }))
