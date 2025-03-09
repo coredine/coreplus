@@ -23,7 +23,7 @@ export class PaymentMethodCard extends Component<PaymentMethodCardProperties, an
 
     render(): ReactNode {
         return(
-            <TouchableOpacity className="w-100 flex-col m-3 bg-gray-300 rounded-md p-3" style={{height: this.props.height ? this.props.height : "14%"}} onPress={this.toggle}>
+            <TouchableOpacity testID={this.props.name.toString()} className="w-100 flex-col m-3 bg-gray-300 rounded-md p-3" style={{height: this.props.height ? this.props.height : "14%"}} onPress={this.toggle}>
 
                 <View className="flex-row h-[100%]">
 
