@@ -37,7 +37,7 @@ describe("Test payment page", () => {
       "initialUrl": "/SmartCartPayment"
     });
     
-    expect(getByText("Email")).toBeDefined();
+    expect(getByText("Card Number")).toBeDefined();
     expect(getByText("Password")).toBeDefined();
   })
   
@@ -63,11 +63,11 @@ describe("Test payment page", () => {
     });
 
     act(async () => {
-      fireEvent.changeText(getByTestId("inputEmail"), "email@gmail.com");
+      fireEvent.changeText(getByTestId("inputCard Number"), "email@gmail.com");
       fireEvent.changeText(getByTestId("inputPassword"), "password");
     });
 
-    expect(getByTestId("inputEmail")).toBeDefined();
+    expect(getByTestId("inputCard Number")).toBeDefined();
     expect(getByTestId("inputPassword")).toBeDefined();
   })
 })
