@@ -2,6 +2,6 @@ import { Product } from "./Product";
 
 
 export interface OrderData {
-    email: string;
+    permanentAccountNumber: string;
     password: string;
 }
