@@ -30,7 +30,7 @@ export default function Cart() {
       <ResizableComponent childOne={ ( 
         <View style={styles.container}>
           <Camera barcodeType='code128' scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
-            console.log(value.data);
+            // console.log(value.data);
             StaticCart.scanOff();
             if (removeMode && (removeMode.sku!=value.data)) {
               setTimeout( () => {
