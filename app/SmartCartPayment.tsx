@@ -96,7 +96,7 @@ export default function SmartCartPayment() {
                             <Text className="m-auto text-purple-600 text-3xl font-extrabold">THANKS FOR YOUR PAYMENT</Text>
                         </View>
                         <View className="w-[90%] h-[33%] m-2" style={{backgroundColor: bgc}}>
-                            <TouchableOpacity onPress={toHome} className="w-[50%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
+                            <TouchableOpacity testID="goHome" onPress={toHome} className="w-[50%] bg-blue-700 rounded-2xl h-[5vh] m-auto">
                                 <Text className="text-white m-auto text-2xl font-semibold">Home</Text>
                             </TouchableOpacity>
                         </View>
