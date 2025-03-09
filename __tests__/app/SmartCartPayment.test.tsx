@@ -2,6 +2,7 @@ import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import SmartCartPayment from '../../app/SmartCartPayment';
 import { act } from 'react';
 import { router } from 'expo-router';
+import BluetoothService from '../../service/BluetoothService';
 
 const MockSmartCartPayment = jest.fn(() => <SmartCartPayment/>);
 
@@ -41,20 +42,6 @@ describe("Test payment page", () => {
     expect(getByText("Password")).toBeDefined();
   })
   
-  //it("should go home", () => {
-  //  const { getByTestId } = renderRouter({
-  //    "/SmartCartPayment": MockSmartCartPayment
-  //  }, {
-  //    "initialUrl": "/SmartCartPayment"
-  //  });
-//
-  //  act(async () => {
-  //    fireEvent.press(getByTestId("checkoutContinue"));
-  //  });
-//
-  //  expect(router.replace).toHaveBeenCalledTimes(1);
-  //})
-  
   it("should edit email and password", () => {
     const { getByTestId } = renderRouter({
       "/SmartCartPayment": MockSmartCartPayment
@@ -63,8 +50,9 @@ describe("Test payment page", () => {
     });
 
     act(async () => {
-      fireEvent.changeText(getByTestId("inputCard Number"), "email@gmail.com");
+      fireEvent.changeText(getByTestId("inputCard Number"), "1234 1234 1234 1234");
       fireEvent.changeText(getByTestId("inputPassword"), "password");
+      fireEvent.press(getByTestId("checkoutContinue"));
     });
 
     expect(getByTestId("inputCard Number")).toBeDefined();
