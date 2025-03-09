@@ -26,6 +26,7 @@ export interface FormInputStates {
 
 }
 
+/*
 export class FormInput extends Component<FormInputProperties, FormInputStates, any> {
     constructor(properties: FormInputProperties) {
         super(properties);
@@ -67,7 +68,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
                     </View>
                     {this.props.icon ? 
                         <TouchableOpacity className="w-[15%] border-2 border-blue-700 h-[7vh] mt-[2.86vh]" onPress={this.focus}>
-                            {/* <FontAwesomeIcon icon={this.props.icon} size={30} style={{margin: "auto"}} color="blue"/> */}
+                            // { <FontAwesomeIcon icon={this.props.icon} size={30} style={{margin: "auto"}} color="blue"/> }
                         </TouchableOpacity> 
                     : 
                     null}
@@ -97,6 +98,7 @@ export class FormInput extends Component<FormInputProperties, FormInputStates, a
         )
     }
 }
+*/
 
 export interface SimpleFormInputProperties {
     backgroundColor: ColorValue | undefined;

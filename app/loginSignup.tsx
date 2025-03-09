@@ -2,7 +2,7 @@ import { Component, ReactNode, RefObject } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { PageTitle } from "../components/pageTitle";
 import { verify, regexCode } from "../service/RegexService";
-import { FormInput } from "../components/formInput";
+// import { FormInput } from "../components/formInput";
 
 export enum PageState {
     LOGIN,
