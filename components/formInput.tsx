@@ -117,7 +117,7 @@ export function SimpleFormInput(props: SimpleFormInputProperties) {
             <View style={{alignSelf: "flex-start", backgroundColor: props.backgroundColor}} className="z-10 relative ml-[2vw] top-[1.5vh] p-1">
                 <Text className="w-auto text-blue-700">{props.label}</Text>
             </View>
-            <TextInput className="border-2 border-blue-700 h-[7vh] p-2" onChangeText={(text: string) => props.onChangeText(text)} value={props.value} secureTextEntry={props.hidden}/>
+            <TextInput testID={"input"+props.label} className="border-2 border-blue-700 h-[7vh] p-2" onChangeText={(text: string) => props.onChangeText(text)} value={props.value} secureTextEntry={props.hidden}/>
         </View>
     )
 }
