@@ -15,6 +15,9 @@ jest.mock("react-native-ble-plx", ()=> ({
     }) ),
     startDeviceScan: jest.fn(),
     stopDeviceScan: jest.fn()
+  })),
+  Characteristic: jest.fn( () => ({
+    read: jest.fn( async () => ({value:"123"}))
   }))
 }))
 
@@ -41,12 +44,11 @@ describe("Test Bluetooth service", () => {
   })
   it("should send and receive sku", async () => {
     await inst.sendSku("123456", "ADD")
-    // inst.skuCallback(null, null)
+    //inst.skuCallback(null, {read: async () => ({value:JSON.stringify({title:"Product", sku:"123456"})}) })
     expect(inst.isConnected()).toBeTruthy();
   })
   it("should send payment info", async () => {
     await inst.sendPaymentInfos("email", "password")
-    // inst.skuCallback(null, null)
     expect(inst.isConnected()).toBeTruthy();
   })
   it("should close connection", async () => {
