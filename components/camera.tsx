@@ -2,13 +2,22 @@ import { BarcodeScanningResult, BarcodeType, CameraView,  useCameraPermissions }
 import { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
+enum ScanMode {
+  NEVER,
+  DEFAULT,
+  ALWAYS
+}
+
 interface CameraProps{
   // Only one barcode type at a time. 
   // Maybe allowing different types would be nice?
   barcodeType: BarcodeType;
   onBarcodeScanned?: CallableFunction;
-  width?:number;
-  height?:number;
+  width?:number|string;
+  height?:number|string;
+  borderWidth?:number;
+  borderRadius?:number;
+  scanMode?:ScanMode;
 }
 
 export default function Camera(props:CameraProps) {
@@ -16,7 +25,8 @@ export default function Camera(props:CameraProps) {
   const [lastScan, setLastScan] = useState<string>("");
 
   const barcodeTypes : BarcodeType[] = [props.barcodeType]
-  const cameraStyle = { width:props.width, height:props.height }
+  const cameraStyle = { width:props.width ?? "100%", height: props.height ?? "100%", 
+    borderRadius:props.borderRadius ?? 0, borderWidth:props.borderWidth ?? 0 }
 
   if (!permission) { return <View/>; }
 
@@ -30,8 +40,11 @@ export default function Camera(props:CameraProps) {
   }
 
   const onScan = (scanResult:BarcodeScanningResult) => {
-    // Only call the method if the scan result is different.
-    if (lastScan!==scanResult.data){
+    if (props.scanMode==ScanMode.NEVER) 
+      return;
+
+    // Only call the method if the scan result is different or scan mode is always.
+    if (lastScan!==scanResult.data || props.scanMode==ScanMode.ALWAYS) {
       if (props.onBarcodeScanned)
         props.onBarcodeScanned(scanResult);
       else
@@ -55,8 +68,6 @@ const styles = StyleSheet.create({
     padding:8
   },
   cameraContainer:{
-    borderWidth:2,
-    borderRadius:32,
     borderCurve:'circular'
   },
   message: {
@@ -71,5 +82,4 @@ const styles = StyleSheet.create({
   }
 });
 
-
-  
+export { ScanMode };
