@@ -23,7 +23,7 @@ export default function ProductCard(props: ProductProps){
 
     return (
       <Reanimated.View style={{width:64}} className="bg-red-500 justify-center">
-        <TouchableOpacity onPress={() => props?.onPressRemove()}>
+        <TouchableOpacity testID="removeProduct" onPress={() => props?.onPressRemove()}>
           <Text className="text-center text-2xl text-white">X</Text>
         </TouchableOpacity>
       </Reanimated.View>

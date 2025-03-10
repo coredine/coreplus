@@ -6,7 +6,7 @@ import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
 import Camera, { ScanMode } from '../components/camera';
 import BluetoothService from '../service/BluetoothService';
 
-export default function HomePage() {
+export default function Home() {
   const [scanValue, setScanValue] = useState<string | undefined>();
   const [scanMode, setScanMode] = useState(ScanMode.ALWAYS);
   const instance = useRef(BluetoothService.getInstance());

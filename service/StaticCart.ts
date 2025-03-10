@@ -1,5 +1,5 @@
-import { ScanMode } from "./camera";
-import { Product } from "./Product";
+import { ScanMode } from "../components/camera";
+import { Product } from "../components/Product";
 
 export class StaticCart {
     private static products : Product[] = [];

@@ -1,52 +1,133 @@
-import { Component, ReactNode } from "react";
-import { View } from "react-native";
-
-export interface CheckoutProperties {
-    //product array 
-}
-
-export interface CreditCardData {
-    cardNumber: string | undefined;
-    cardHolder: string | undefined;
-    expirationDate: Date | undefined;
-    verificationValue: string | undefined;
-}
+import { Component, ReactElement, ReactNode } from "react";
+import { View, Platform } from "react-native";
+import { PaymentMethodCard } from "../components/paymentMethodCard";
+import CheckoutButtons from "../components/checkoutButtons";
+import { PageTitle } from "../components/pageTitle";
+import { router } from "expo-router";
+import BluetoothService from "../service/BluetoothService";
 
 export interface CheckoutStates {
-    creditCardData: CreditCardData;
-    canPay: boolean;
+    options: {
+        smartCartSelected: boolean;
+        paypalSelected: boolean;
+        creditCardSelected: boolean;
+        platformMethodSelected: boolean;
+    };
+    selectedOptionKey: string | undefined;
+    cannotProceed: boolean;
 }
 
-export default class Checkout extends Component<CheckoutProperties, CheckoutStates, any> {
-    constructor(properties: CheckoutProperties) {
+export default class Checkout extends Component<any, CheckoutStates, any> {
+    constructor(properties: any) {
         super(properties);
         this.state = {
-            creditCardData: {
-                cardNumber: undefined,
-                cardHolder: undefined,
-                expirationDate: undefined,
-                verificationValue: undefined
+            options: {
+                smartCartSelected: false,
+                paypalSelected: false,
+                creditCardSelected: false,
+                platformMethodSelected: false
             },
-            canPay: false
+            selectedOptionKey: undefined,
+            cannotProceed: true
         }
     }
 
-    private sendOrder = async () => {
-        //send to mocrocontroller/server
+    componentDidMount(): void {
+        if (!BluetoothService.getInstance().isConnected) router.replace("/home"); 
     }
+
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<CheckoutStates>, snapshot?: any): void {
+        this.checkSingleSelect();
+        this.updateProceedState();
+    }
+
+    private iterateStateObjectEntries = (object: {}, callback: (key: string, value: any) => void): void => {
+        for (const [key, value] of Object.entries(object)) callback(key, value);
+    }
+
+    private checkSingleSelect = (): void => {
+        this.iterateStateObjectEntries(this.state.options, (key: string, selected: any) => {
+            if (this.state.selectedOptionKey === undefined && selected) this.setState({selectedOptionKey: key});
+            else if (this.state.selectedOptionKey !== key && selected) {
+                this.setState({options: {...this.state.options, [this.state.selectedOptionKey as string]: false}});
+                this.setState({selectedOptionKey: key});
+            }
+        });
+    }
+
+    private updateProceedState = (): void => {
+        let nothingSelected: boolean = true;
+        this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
+            if (value && this.state.cannotProceed === true) {
+                this.setState({cannotProceed: false});
+                nothingSelected = false;
+            } else if (value) nothingSelected = false;
+        });
+        if (nothingSelected === true && this.state.cannotProceed === false) this.setState({cannotProceed: true});
+    }
+
+    private _setState = (value: boolean, selectName: string) => {
+        this.setState({options: {...this.state.options, [selectName]: value}});
+    }
+
+    /*
+    private resetOptions = (): void => {
+        this.iterateStateObjectEntries(this.state.options, (key: string, value: any) => {
+            this.setState({options: {...this.state.options, [key]: false}});
+        });
+    }
+    */
+
+    private proceed = () => {
+        switch (this.state.selectedOptionKey) {
+            case "smartCartSelected":
+                router.navigate("/SmartCartPayment");
+                break;
+            default:
+                console.log("not yet implemented");
+                break;
+        }
+    }
+
+    private getPlatformPaymentMethodButton = (): ReactElement | null => {
+        if (Platform.OS == "android") 
+            return <PaymentMethodCard name={"Google Pay"} icons={["google-pay"]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
+        else if (Platform.OS == "ios") 
+            return <PaymentMethodCard name={"Apple Pay"} icons={["apple-pay"]} value={this.state.options.platformMethodSelected} onValueChanged={(value: boolean) => {this._setState(value, "platformMethodSelected")}}/>;
+        return null;
+    }
+
 
     render(): ReactNode {
         return(
-            <View>
-                <View>
-                    {/* PAYMENT METHODS */}
-                    {/* OPEN MODAL */}
+            <View className="w-100 h-100">
+                <PageTitle title="Payment Method"/>
+
+                <View className="h-[77%]">
+                    <PaymentMethodCard 
+                    description={"SmartCart custom paying service."} 
+                    name={"SmartCart"}
+                    onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, smartCartSelected: value}})}} 
+                    icons={["cart-shopping"]} 
+                    height="20%" 
+                    value={this.state.options.smartCartSelected}/>
+
+                    <PaymentMethodCard 
+                    name={"Paypal"} 
+                    onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, paypalSelected: value}})}} 
+                    icons={["paypal"]} 
+                    value={this.state.options.paypalSelected}/>
+
+                    <PaymentMethodCard
+                    name={"Credit Card or Debit Card"} 
+                    onValueChanged={(value: boolean) => {this.setState({options: {...this.state.options, creditCardSelected: value}})}} 
+                    icons={["cc-mastercard", "cc-visa"]} 
+                    value={this.state.options.creditCardSelected}/>
+
+                    {this.getPlatformPaymentMethodButton()}
                 </View>
 
-                <View>
-                    {/* GOBACK */}
-                    {/* SENDDATA */}
-                </View>
+                <CheckoutButtons proceedOnPress={this.proceed} proceedText={"Continue"} grayedOut={this.state.cannotProceed}/>
             </View>
         )
     }

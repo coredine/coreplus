@@ -43,3 +43,6 @@ ios
 
 # IDE
 .idea
+
+# tests
+coverage

@@ -1,15 +1,16 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ResizableComponent from '../components/ResizableComponent';
 import Camera, { ScanMode } from '../components/camera';
 import { useEffect, useRef, useState } from 'react';
 import { BarcodeScanningResult } from 'expo-camera';
 import ProductCard, { Product } from '../components/Product';
 import BluetoothService from '../service/BluetoothService';
-import { StaticCart } from '../components/StaticCart';
+import { StaticCart } from '../service/StaticCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import CheckoutButtons from '../components/checkoutButtons';
 
-export default function App() {
+export default function Cart() {
   const productList = StaticCart.productList();
   const [trigger, setTrigger] = useState(0);
   const [removeMode, setRemoveMode] = useState<Product | undefined>(undefined)
@@ -17,7 +18,7 @@ export default function App() {
 
   useEffect( () => {
     if (!instance.current.isConnected()){
-      alert("You're not connected!")
+      Alert.alert("Connection error.","No cart connected!")
       router.replace("/home")
     }
   }, []);
@@ -29,7 +30,7 @@ export default function App() {
       <ResizableComponent childOne={ ( 
         <View style={styles.container}>
           <Camera barcodeType='code128' scanMode={StaticCart.getScanMode()} onBarcodeScanned={async (value: BarcodeScanningResult) => {
-            console.log(value.data);
+            // console.log(value.data);
             StaticCart.scanOff();
             if (removeMode && (removeMode.sku!=value.data)) {
               setTimeout( () => {
@@ -55,8 +56,11 @@ export default function App() {
                 />
             ))}
           </ScrollView>
-          <View className='border-t-2 h-12' style={{borderColor:"lightgray"}}>
-            <Text className='text-center text-l p-2'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
+          <View className='flex flex-row justify-between border-t-2 h-13' style={{borderColor:"lightgray"}}>
+            <Text className='text-center text-xl font-semibold p-2 mt-1'>Total: {StaticCart.getTotal().toFixed(2)} + TAX</Text>
+            <View className="flex flex-row justify-center pb-3 mr-3 mt-1" style={{opacity: productList.length <= 0 ? 0.50 : 1}}>
+              <Button testID='goToCheckout' title={"Ready to pay"} onPress={productList.length <= 0 ? null : () => {router.push("/checkout")}} />
+            </View>
           </View>
           {((removeMode)) ? (<>
               <View style={{...styles.overlay, backgroundColor:"black", opacity:0.4}}/>
@@ -65,6 +69,7 @@ export default function App() {
                 <Text className='z-100 py-2 text-white text-center'>{removeMode.title}</Text>
               </View> 
             </>): <></>}
+            
         </SafeAreaView>
       ) } />
         {((StaticCart.getScanMode() != ScanMode.NEVER)) ? <></> :
