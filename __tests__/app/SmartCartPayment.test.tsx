@@ -26,7 +26,7 @@ jest.mock("expo-font", () => ({
 }))
 
 jest.mock('expo-router', () => ({
-  router: { push: jest.fn(), replace: jest.fn() }
+  router: { push: jest.fn(), replace: jest.fn(), back: jest.fn() }
 }));
 
 describe("Test payment page", () => {
@@ -56,5 +56,18 @@ describe("Test payment page", () => {
 
     expect(getByTestId("inputCard Number")).toBeDefined();
     expect(getByTestId("inputPassword")).toBeDefined();
+  })
+  it("should press back button", () => {
+    const { getByTestId } = renderRouter({
+      "/SmartCartPayment": MockSmartCartPayment
+    }, {
+      "initialUrl": "/SmartCartPayment"
+    });
+
+    act(async () => {
+      fireEvent.press(getByTestId("checkoutBack"));
+    });
+
+    expect(router.back).toHaveBeenCalled();
   })
 })
